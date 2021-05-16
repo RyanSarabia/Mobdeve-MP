@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -19,10 +20,13 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+
+
 public class QRScanner extends AppCompatActivity {
 
     CodeScanner codeScanner;
     CodeScannerView scannerView;
+    private String jsonString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +41,13 @@ public class QRScanner extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        jsonString = result.getText();
+                        Intent goToResults = new Intent(QRScanner.this, QRScannerResult.class);
+                        goToResults.putExtra("JSONString", jsonString);
+                        startActivity(goToResults);
+                        finish();
                     }
                 });
-
             }
         });
 
