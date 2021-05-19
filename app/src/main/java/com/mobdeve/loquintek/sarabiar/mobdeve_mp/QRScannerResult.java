@@ -5,16 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class QRScannerResult extends AppCompatActivity {
 
     private String jsonString;
     private JSONObject jsonObject;
 
-    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice;
+    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber;
+    private Button saveReceipt;
+    private Date receiptDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +37,25 @@ public class QRScannerResult extends AppCompatActivity {
         this.itemQuantities = findViewById(R.id.itemQuantities);
         this.vatPrice = findViewById(R.id.vatPrice);
         this.vatablePrice = findViewById(R.id.vatablePrice);
+        this.saveReceipt = findViewById(R.id.saveReceipt);
+        this.date = findViewById(R.id.date);
+        this.serialNumber = findViewById(R.id.serialNumber);
+
+        saveReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ReceiptModel newReceipt = new ReceiptModel(-1, merchantName.getText().toString(),
+                                                                merchantAddress.getText().toString(),
+                                                                items.getText().toString(),
+                                                                unitPrices.getText().toString(),
+                                                                itemQuantities.getText().toString(),
+                                                                Float.parseFloat(vatPrice.getText().toString()),
+                                                                Float.parseFloat(vatablePrice.getText().toString()),
+                                                                receiptDate,
+                                                                serialNumber.getText().toString());
+            }
+        });
 
         Intent fromScanner = getIntent();
         this.jsonString = fromScanner.getStringExtra("JSONString");
@@ -42,6 +70,15 @@ public class QRScannerResult extends AppCompatActivity {
             itemQuantities.setText(jsonObject.getString("itemQuantities"));
             vatPrice.setText(jsonObject.getString("vatPrice"));
             vatablePrice.setText(jsonObject.getString("vatablePrice"));
+            date.setText(jsonObject.getString("date"));
+            serialNumber.setText(jsonObject.getString("serialNumber"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try{
+                this.receiptDate = dateFormat.parse(date.getText().toString());
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+            }
         }
         catch(Throwable t){
             Log.e("My App", "Could not parse malformed JSON: \"" + jsonString + "\"");
