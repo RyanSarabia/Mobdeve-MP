@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -44,7 +45,6 @@ public class QRScannerResult extends AppCompatActivity {
         saveReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ReceiptModel newReceipt = new ReceiptModel(-1, merchantName.getText().toString(),
                                                                 merchantAddress.getText().toString(),
                                                                 items.getText().toString(),
@@ -52,9 +52,17 @@ public class QRScannerResult extends AppCompatActivity {
                                                                 itemQuantities.getText().toString(),
                                                                 Float.parseFloat(vatPrice.getText().toString()),
                                                                 Float.parseFloat(vatablePrice.getText().toString()),
-                                                                receiptDate,
+                                                                 receiptDate,
                                                                 serialNumber.getText().toString());
+
+                Database database = new Database(QRScannerResult.this);
+
+                boolean success = database.addReceipt(newReceipt);
+                Toast.makeText(QRScannerResult.this, "Success = " + success, Toast.LENGTH_SHORT).show();
             }
+
+
+
         });
 
         Intent fromScanner = getIntent();

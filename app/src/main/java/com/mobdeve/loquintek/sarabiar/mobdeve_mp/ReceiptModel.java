@@ -11,9 +11,9 @@ public class ReceiptModel {
     private int id;
     private String merchantName;
     private String merchantAddress;
-    private ArrayList<String> items = new ArrayList<>();
-    private ArrayList<Float> unitPrices = new ArrayList<>();
-    private ArrayList<Integer> itemQuantities = new ArrayList<>();
+    private String items;
+    private String  unitPrices;
+    private String  itemQuantities;
     private Float vatPrice;
     private Float vatablePrice;
     private Date date;
@@ -21,27 +21,29 @@ public class ReceiptModel {
 
     public ReceiptModel(int id, String merchantName, String merchantAddress, String items, String unitPrices, String itemQuantities, Float vatPrice, Float vatablePrice, Date date, String serialNumber) {
 
-        StringTokenizer stItems = new StringTokenizer(items, ",");
-        StringTokenizer stUnitPrices = new StringTokenizer(unitPrices, ",");
-        StringTokenizer stItemQuantities = new StringTokenizer(itemQuantities, ",");
+//        StringTokenizer stItems = new StringTokenizer(items, ",");
+//        StringTokenizer stUnitPrices = new StringTokenizer(unitPrices, ",");
+//        StringTokenizer stItemQuantities = new StringTokenizer(itemQuantities, ",");
 
 
         this.id = id;
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
 
-        while (stItems.countTokens() >0){
-            this.items.add(stItems.nextToken());
-        }
-
-        while (stUnitPrices.countTokens() >0){
-            this.unitPrices.add(Float.parseFloat(stUnitPrices.nextToken()));
-        }
-
-        while (stItemQuantities.countTokens() >0){
-            this.itemQuantities.add(Integer.parseInt(stItemQuantities.nextToken()));
-        }
-
+//        while (stItems.countTokens() >0){
+//            this.items.add(stItems.nextToken());
+//        }
+//
+//        while (stUnitPrices.countTokens() >0){
+//            this.unitPrices.add(Float.parseFloat(stUnitPrices.nextToken()));
+//        }
+//
+//        while (stItemQuantities.countTokens() >0){
+//            this.itemQuantities.add(Integer.parseInt(stItemQuantities.nextToken()));
+//        }
+        this.items = items;
+        this.unitPrices = unitPrices;
+        this.itemQuantities = itemQuantities;
         this.vatPrice = vatPrice;
         this.vatablePrice = vatablePrice;
         this.date = date;
@@ -76,15 +78,15 @@ public class ReceiptModel {
         return merchantAddress;
     }
 
-    public ArrayList<String> getItems() {
+    public String getItems() {
         return items;
     }
 
-    public ArrayList<Float> getUnitPrices() {
+    public String getUnitPrices() {
         return unitPrices;
     }
 
-    public ArrayList<Integer> getItemQuantities() {
+    public String getItemQuantities() {
         return itemQuantities;
     }
 
@@ -116,15 +118,15 @@ public class ReceiptModel {
         this.merchantAddress = merchantAddress;
     }
 
-    public void setItems(ArrayList<String> items) {
+    public void setItems(String items) {
         this.items = items;
     }
 
-    public void setUnitPrices(ArrayList<Float> unitPrices) {
+    public void setUnitPrices(String unitPrices) {
         this.unitPrices = unitPrices;
     }
 
-    public void setItemQuantities(ArrayList<Integer> itemQuantities) {
+    public void setItemQuantities(String itemQuantities) {
         this.itemQuantities = itemQuantities;
     }
 
