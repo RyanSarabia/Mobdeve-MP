@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menuItemDescTv="This item is"
+        app:menuItemDescTv="Open receipts"
         app:menuItemImg="@drawable/receipt_icon"
-        app:menuItemNameTv="Hello" />
+        app:menuItemNameTv="Receipt List" />
 
     <com.mobdeve.loquintek.sarabiar.mobdeve_mp.MenuItemView
         android:id="@+id/portMv"
