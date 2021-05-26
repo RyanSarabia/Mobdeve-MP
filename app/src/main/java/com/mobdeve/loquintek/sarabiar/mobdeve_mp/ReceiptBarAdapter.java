@@ -1,5 +1,6 @@
 package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,11 @@ import java.util.ArrayList;
 public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
 
     private ArrayList<ReceiptBarModel> receiptList;
+    private Context context;
 
-    public ReceiptBarAdapter() {
+    public ReceiptBarAdapter(Context context) {
         receiptList = new ArrayList<ReceiptBarModel>();
+        this.context = context;
 
     }
 
@@ -22,7 +25,7 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.receipt_bar_layout, parent, false);
 
-        ReceiptBarHolder holder = new ReceiptBarHolder(view);
+        ReceiptBarHolder holder = new ReceiptBarHolder(view, context);
         return holder;
     }
 
