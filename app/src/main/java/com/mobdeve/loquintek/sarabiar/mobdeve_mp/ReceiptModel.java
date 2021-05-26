@@ -30,8 +30,8 @@ public class ReceiptModel {
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
 
-//        while (stItems.countTokens() >0){
-//            this.items.add(stItems.nextToken());
+ //       while (stItems.countTokens() >0){
+ //           this.items.add(stItems.nextToken());
 //        }
 //
 //        while (stUnitPrices.countTokens() >0){
