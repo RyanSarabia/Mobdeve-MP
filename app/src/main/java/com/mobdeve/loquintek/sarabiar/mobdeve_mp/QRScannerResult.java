@@ -85,7 +85,7 @@ public class QRScannerResult extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Database db = new Database(QRScannerResult.this);
-                List<ReceiptModel> receipts = db.getAllByDate();
+                List<ReceiptModel> receipts = db.getAllByDateAscending();
 
                 Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
             }
