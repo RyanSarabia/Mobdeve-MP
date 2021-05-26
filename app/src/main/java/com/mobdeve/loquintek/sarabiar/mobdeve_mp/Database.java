@@ -102,7 +102,7 @@ public class Database extends SQLiteOpenHelper{
 
         String pattern = "yyyy-MM-dd";
         DateFormat df = new SimpleDateFormat(pattern, Locale.US);
-        cv1.put(COLUMN_DATE, df.format("2020-09-23"));
+        cv1.put(COLUMN_DATE, "2020-09-23");
         cv1.put(COLUMN_SERIAL_NUMBER, "12345678911234");
 
         db.insert(RECEIPTS_TABLE, null,cv1);
@@ -120,7 +120,7 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_VATABLE, "1350,450000");
         cv2.put(COLUMN_TAGS, "");
 
-        cv2.put(COLUMN_DATE, df.format("2021-03-15"));
+        cv2.put(COLUMN_DATE, "2021-03-15");
         cv2.put(COLUMN_SERIAL_NUMBER, "98765432112345");
 
         long insert = db.insert(RECEIPTS_TABLE, null,cv2);
@@ -372,6 +372,7 @@ public class Database extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
+        cursor.moveToFirst();
         int receiptID = cursor.getInt(0);
         String merchantName = cursor.getString(1);
         String merchantAddress = cursor.getString(2);

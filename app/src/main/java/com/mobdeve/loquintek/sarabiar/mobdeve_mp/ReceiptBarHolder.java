@@ -1,6 +1,7 @@
 package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class ReceiptBarHolder extends RecyclerView.ViewHolder{
 
     private TextView receiptBarStoreTv;
@@ -19,6 +23,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private TextView receiptBarTotalTv;
     private Button receiptBarSettingsBtn;
     private Button receiptBarTagBtn;
+    private String receiptBarSerialNo;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -29,6 +34,8 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private Button popupDoneBtn;
     private TableLayout popupTagTl;
 
+    private NumberFormat numFormatter;
+
     public ReceiptBarHolder (View view, Context context) {
         super(view);
 
@@ -38,6 +45,8 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         receiptBarTotalTv = view.findViewById(R.id.receiptBarTotalTv);
         receiptBarSettingsBtn = view.findViewById(R.id.receiptBarSettingsBtn);
         receiptBarTagBtn = view.findViewById(R.id.receiptBarTagBtn);
+
+        numFormatter = new DecimalFormat("#0.00");
         this.context = context;
 
 
@@ -45,6 +54,15 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View v) {
                 createTagDialog();
+            }
+        });
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ReceiptActivity.class);
+                intent.putExtra("SERIAL_NO", receiptBarSerialNo);
+                v.getContext().startActivity(intent);
             }
         });
     }
@@ -62,11 +80,16 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     }
 
     public void setReceiptBarTotalTv(double total) {
-        this.receiptBarTotalTv.setText(String.valueOf(total));
+
+        this.receiptBarTotalTv.setText(numFormatter.format(total));
     }
 
     public void setReceiptBarSettingsBtn(Button receiptBarSettingsBtn) {
         this.receiptBarSettingsBtn = receiptBarSettingsBtn;
+    }
+
+    public void setReceiptBarSerialNo(String serialNo) {
+        this.receiptBarSerialNo = serialNo;
     }
 
 
