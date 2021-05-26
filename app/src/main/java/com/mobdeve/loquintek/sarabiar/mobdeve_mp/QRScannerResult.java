@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class QRScannerResult extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class QRScannerResult extends AppCompatActivity {
 
     private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber;
     private Button saveReceipt;
+    private Button showReceipt;
     private Date receiptDate;
 
     @Override
@@ -39,6 +41,7 @@ public class QRScannerResult extends AppCompatActivity {
         this.vatPrice = findViewById(R.id.vatPrice);
         this.vatablePrice = findViewById(R.id.vatablePrice);
         this.saveReceipt = findViewById(R.id.saveReceipt);
+        this.showReceipt = findViewById(R.id.temporaryViewSaved);
         this.date = findViewById(R.id.date);
         this.serialNumber = findViewById(R.id.serialNumber);
 
@@ -63,6 +66,16 @@ public class QRScannerResult extends AppCompatActivity {
 
 
 
+        });
+
+        showReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Database db = new Database(QRScannerResult.this);
+                List<ReceiptModel> receipts = db.getAll();
+
+                Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         Intent fromScanner = getIntent();

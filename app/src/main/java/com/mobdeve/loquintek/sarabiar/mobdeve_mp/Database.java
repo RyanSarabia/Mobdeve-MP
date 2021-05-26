@@ -2,13 +2,18 @@ package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Database extends SQLiteOpenHelper{
@@ -43,6 +48,7 @@ public class Database extends SQLiteOpenHelper{
     }
 
     public Boolean addReceipt(ReceiptModel receiptModel){
+        //For adding new receipt into database
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -65,7 +71,45 @@ public class Database extends SQLiteOpenHelper{
             return false;
         else
             return true;
+    }
 
+    public List<ReceiptModel> getAll(){
+        //Gets all receipts based on when it was added
+        List<ReceiptModel> returnList = new ArrayList<>();
 
+        String queryString = "SELECT * FROM " + RECEIPTS_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()){
+            do{
+                int receiptID = cursor.getInt(0);
+                String merchantName = cursor.getString(1);
+                String merchantAddress = cursor.getString(2);
+                String items = cursor.getString(3);
+                String unitPrices = cursor.getString(4);
+                String itemQuantities = cursor.getString(5);
+                Float vatPrice = cursor.getFloat(6);
+                Float vatablePrice = cursor.getFloat(7);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                Date date = new Date();
+                try{
+                     date = dateFormat.parse(cursor.getString(8));
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                }
+                String serialNumber = cursor.getString(9);
+
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                returnList.add(newReceipt);
+            }while(cursor.moveToNext());
+        }
+        else{
+            //Nothing in db, do not add anything to returnList
+        }
+        cursor.close();
+        return returnList;
     }
 }
