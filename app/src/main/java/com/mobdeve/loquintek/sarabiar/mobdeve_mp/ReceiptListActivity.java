@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class ReceiptListActivity extends AppCompatActivity {
@@ -14,6 +15,7 @@ public class ReceiptListActivity extends AppCompatActivity {
     private RecyclerView receiptListItemsRv;
     private RecyclerView.LayoutManager manager;
     private ReceiptBarAdapter adapter;
+    private ArrayList<Tag> tagList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

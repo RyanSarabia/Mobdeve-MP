@@ -99,7 +99,7 @@ public class QRScannerResult extends AppCompatActivity {
 
             }
         });
-        deleteAll.setEnabled(false);
+        //deleteAll.setEnabled(false);
 
         Intent fromScanner = getIntent();
         this.jsonString = fromScanner.getStringExtra("JSONString");
