@@ -12,8 +12,8 @@ public class ReceiptModel {
     private String merchantName;
     private String merchantAddress;
     private String items;
-    private String  unitPrices;
-    private String  itemQuantities;
+    private String unitPrices;
+    private String itemQuantities;
     private Float vatPrice;
     private Float vatablePrice;
     private Date date;

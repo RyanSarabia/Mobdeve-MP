@@ -112,4 +112,20 @@ public class Database extends SQLiteOpenHelper{
         cursor.close();
         return returnList;
     }
+
+    public boolean deleteOne (ReceiptModel receiptModel){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "DELETE FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_ID + " = " + receiptModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }
