@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,8 @@ public class QRScannerResult extends AppCompatActivity {
     private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber;
     private Button saveReceipt;
     private Button showReceipt;
+    private Button showReceiptByDate;
+    private Button deleteAll;
     private Date receiptDate;
 
     @Override
@@ -44,6 +47,8 @@ public class QRScannerResult extends AppCompatActivity {
         this.showReceipt = findViewById(R.id.temporaryViewSaved);
         this.date = findViewById(R.id.date);
         this.serialNumber = findViewById(R.id.serialNumber);
+        this.deleteAll = findViewById(R.id.deleteAll);
+        this.showReceiptByDate = findViewById(R.id.sortedByDate);
 
         saveReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +69,6 @@ public class QRScannerResult extends AppCompatActivity {
                 Toast.makeText(QRScannerResult.this, "Success = " + success, Toast.LENGTH_SHORT).show();
             }
 
-
-
         });
 
         showReceipt.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +80,26 @@ public class QRScannerResult extends AppCompatActivity {
                 Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        showReceiptByDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Database db = new Database(QRScannerResult.this);
+                List<ReceiptModel> receipts = db.getAllByDateAscending();
+
+                Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        deleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Database db = new Database(QRScannerResult.this);
+                boolean result = db.deleteAll();
+
+            }
+        });
+        //deleteAll.setEnabled(false);
 
         Intent fromScanner = getIntent();
         this.jsonString = fromScanner.getStringExtra("JSONString");

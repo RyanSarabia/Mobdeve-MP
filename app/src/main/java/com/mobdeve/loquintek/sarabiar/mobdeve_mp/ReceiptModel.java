@@ -2,6 +2,7 @@ package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
 import android.content.Intent;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -12,12 +13,13 @@ public class ReceiptModel {
     private String merchantName;
     private String merchantAddress;
     private String items;
-    private String  unitPrices;
-    private String  itemQuantities;
+    private String unitPrices;
+    private String itemQuantities;
     private Float vatPrice;
     private Float vatablePrice;
     private Date date;
     private String serialNumber;
+    private ArrayList<Tag> receiptTags = new ArrayList<>();
 
     public ReceiptModel(int id, String merchantName, String merchantAddress, String items, String unitPrices, String itemQuantities, Float vatPrice, Float vatablePrice, Date date, String serialNumber) {
 
@@ -30,8 +32,8 @@ public class ReceiptModel {
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
 
-//        while (stItems.countTokens() >0){
-//            this.items.add(stItems.nextToken());
+ //       while (stItems.countTokens() >0){
+ //           this.items.add(stItems.nextToken());
 //        }
 //
 //        while (stUnitPrices.countTokens() >0){
@@ -144,5 +146,30 @@ public class ReceiptModel {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+    public String getTagsAsString(){
+        String tagString ="";
+        for (int i =0; i < receiptTags.size(); i++){
+            if (i != receiptTags.size()-1){
+                tagString.concat(receiptTags.get(i).getTagName()+",");
+            }
+            else{
+                tagString.concat(receiptTags.get(i).getTagName());
+            }
+        }
+        return tagString;
+    }
+
+    public void addTag(Tag newTag){
+        receiptTags.add(newTag);
+    }
+
+    public void deleteTag(Tag deleteTag){
+        for (int i =0; i<receiptTags.size();i++){
+            if(receiptTags.get(i).getTagName() == deleteTag.getTagName()){
+                receiptTags.remove(i);
+                break;
+            }
+        }
     }
 }
