@@ -80,6 +80,56 @@ public class Database extends SQLiteOpenHelper{
             return true;
     }
 
+    public Boolean addDummyReceipt(){
+        //For adding new receipt into database
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
+
+        db.execSQL(createTableStatement);
+        ContentValues cv1 = new ContentValues();
+        ContentValues cv2 = new ContentValues();
+
+        cv1.put(COLUMN_MERCHANT_NAME, "Rustan's");
+        cv1.put(COLUMN_MERCHANT_ADDRESS, "KungSaanMan, 2nd street, Las Vegas, Toronto");
+        cv1.put(COLUMN_ITEMS, "Catether,Breastplate,Paintball");
+        cv1.put(COLUMN_UNIT_PRICES, "100.5,20.2,10000");
+        cv1.put(COLUMN_ITEM_QUANTITIES, "1,1,200");
+        cv1.put(COLUMN_VAT, "10.5,2.2,100");
+        cv1.put(COLUMN_VATABLE, "90,18,9900");
+        cv1.put(COLUMN_TAGS, "");
+
+        String pattern = "yyyy-MM-dd";
+        DateFormat df = new SimpleDateFormat(pattern, Locale.US);
+        cv1.put(COLUMN_DATE, df.format("2020-09-23"));
+        cv1.put(COLUMN_SERIAL_NUMBER, "12345678911234");
+
+        db.insert(RECEIPTS_TABLE, null,cv1);
+//        if (insert ==-1)
+//            return false;
+//        else
+//            return true;
+
+        cv2.put(COLUMN_MERCHANT_NAME, "Shakey's");
+        cv2.put(COLUMN_MERCHANT_ADDRESS, "Here, 2nd street, Los Angeles, Manila");
+        cv2.put(COLUMN_ITEMS, "Klean Kanteen,Golden Rings");
+        cv2.put(COLUMN_UNIT_PRICES, "1500,500000");
+        cv2.put(COLUMN_ITEM_QUANTITIES, "1,5");
+        cv2.put(COLUMN_VAT, "150,50000");
+        cv2.put(COLUMN_VATABLE, "1350,450000");
+        cv2.put(COLUMN_TAGS, "");
+
+        cv2.put(COLUMN_DATE, df.format("2021-03-15"));
+        cv2.put(COLUMN_SERIAL_NUMBER, "98765432112345");
+
+        long insert = db.insert(RECEIPTS_TABLE, null,cv2);
+        if (insert ==-1)
+            return false;
+        else
+            return true;
+    }
+
     public List<ReceiptModel> getAll(){
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
