@@ -6,13 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <com.mobdeve.loquintek.sarabiar.mobdeve_mp.MenuItemView
+        android:id="@+id/receiptsMv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menuItemDescTv="Open receipts"
+        app:menuItemImg="@drawable/receipt_icon"
+        app:menuItemNameTv="Receipt List" />
+
+    <com.mobdeve.loquintek.sarabiar.mobdeve_mp.MenuItemView
+        android:id="@+id/portMv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receiptsMv"
+        app:menuItemDescTv="Export and import data"
+        app:menuItemNameTv="Import/Export" />
+
+    <Button
+        android:id="@+id/QRButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="32dp"
+        android:text="Scan QR Code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/portMv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
