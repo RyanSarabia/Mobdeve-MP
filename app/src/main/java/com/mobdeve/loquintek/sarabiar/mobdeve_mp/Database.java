@@ -83,10 +83,15 @@ public class Database extends SQLiteOpenHelper{
         cv.put(COLUMN_SERIAL_NUMBER, receiptModel.getSerialNumber());
 
         long insert = db.insert(RECEIPTS_TABLE, null,cv);
-        if (insert ==-1)
+        if (insert ==-1){
+            db.close();
             return false;
-        else
+        }
+        else{
+            db.close();
             return true;
+        }
+
     }
 
     public Boolean addTag(String tagName){
@@ -100,10 +105,15 @@ public class Database extends SQLiteOpenHelper{
 
         cv.put(COLUMN_TAG_NAME, tagName);
         long insert = db.insert(TAGS_TABLE, null,cv);
-        if (insert ==-1)
+        if (insert ==-1){
+            db.close();
             return false;
-        else
+        }
+        else{
+            db.close();
             return true;
+        }
+
 
     }
 
@@ -124,7 +134,7 @@ public class Database extends SQLiteOpenHelper{
         String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + tagString+  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
 
         db.execSQL(updateString);
-
+        db.close();
 
     }
 
@@ -168,10 +178,16 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_SERIAL_NUMBER, "98765432112345");
 
         long insert = db.insert(RECEIPTS_TABLE, null,cv2);
-        if (insert ==-1)
+        if (insert ==-1){
+            db.close();
             return false;
-        else
+        }
+
+        else{
+            db.close();
             return true;
+        }
+
     }
 
     public List<ReceiptModel> getAll(){
@@ -218,6 +234,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -265,6 +282,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -311,6 +329,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -357,6 +376,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -403,6 +423,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -445,7 +466,7 @@ public class Database extends SQLiteOpenHelper{
             returnReceipt.addTag(new Tag(stTags.nextToken()));
         }
 
-
+        db.close();
         cursor.close();
         return returnReceipt;
     }
@@ -459,10 +480,12 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             return false;
         }
@@ -484,10 +507,12 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             return false;
         }
