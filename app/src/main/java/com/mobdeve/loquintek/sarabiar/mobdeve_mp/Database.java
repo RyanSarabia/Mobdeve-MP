@@ -75,7 +75,7 @@ public class Database extends SQLiteOpenHelper{
         cv.put(COLUMN_ITEM_QUANTITIES, receiptModel.getItemQuantities());
         cv.put(COLUMN_VAT, receiptModel.getVatPrice());
         cv.put(COLUMN_VATABLE, receiptModel.getVatablePrice());
-        cv.put(COLUMN_TAGS, receiptModel.getTagsAsString());
+        cv.put(COLUMN_TAGS, receiptModel.getTagAsString());
 
         String pattern = "yyyy-MM-dd";
         DateFormat df = new SimpleDateFormat(pattern, Locale.US);
@@ -114,26 +114,44 @@ public class Database extends SQLiteOpenHelper{
             return true;
         }
 
-
     }
 
-    public void updateReceiptTag(String updateSerialNumber, String tagName){
+    public void updateTagName(String newTagName, String oldTagName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String updateString = "UPDATE " + TAGS_TABLE + " SET " + COLUMN_TAG_NAME + " = " + newTagName+  " WHERE " + COLUMN_TAG_NAME + " = " + oldTagName;
+        db.execSQL(updateString);
+        db.close();
+    }
+
+    public void updateReceiptsTagName(String newTagName, String oldTagName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + newTagName+  " WHERE " + COLUMN_TAGS + " = " + oldTagName;
+        db.execSQL(updateString);
+        db.close();
+    }
+
+    public void addReceiptTag(String updateSerialNumber, String tagName){
         //Call function along with addTag
 
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
 
-        String queryString = "SELECT FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
-
-
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        String tagString = cursor.getString(10);
-        cursor.close();
-        tagString = tagString.concat("," + tagName);
-        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + tagString+  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + tagName+  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
 
         db.execSQL(updateString);
+        db.close();
+
+    }
+
+    public void deleteTag(String tagName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryStringTag = "DELETE FROM " + TAGS_TABLE + " WHERE " + COLUMN_TAG_NAME + " = " + tagName;
+        Cursor cursor = db.rawQuery(queryStringTag, null);
+        cursor.close();
+        String emptyString = "";
+        String queryStringReceipt = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS +  " = " + emptyString+ " WHERE " + COLUMN_TAGS + " = " + tagName;
+        db.execSQL(queryStringReceipt);
         db.close();
 
     }
@@ -222,10 +240,8 @@ public class Database extends SQLiteOpenHelper{
                 ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
                 String tagString = cursor.getString(10);
 
-                StringTokenizer stTags = new StringTokenizer(tagString, ",");
-                while (stTags.countTokens() >0){
-                    newReceipt.addTag(new Tag(stTags.nextToken()));
-                }
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
 
                 returnList.add(newReceipt);
             }while(cursor.moveToNext());
@@ -236,6 +252,30 @@ public class Database extends SQLiteOpenHelper{
         cursor.close();
         db.close();
         return returnList;
+    }
+
+    public List<Tag> getAllTags(){
+        List<Tag> returnTagList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + TAGS_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()){
+            do{
+                String tagName = cursor.getString(1);
+                Tag newTag = new Tag(tagName);
+
+                returnTagList.add(newTag);
+            }while(cursor.moveToNext());
+        }
+        else{
+            //Nothing in db, do not add anything to returnList
+        }
+        cursor.close();
+        db.close();
+        return returnTagList;
     }
 
     public List<ReceiptModel> getAllByDateDescending(){
@@ -270,10 +310,8 @@ public class Database extends SQLiteOpenHelper{
                 ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
                 String tagString = cursor.getString(10);
 
-                StringTokenizer stTags = new StringTokenizer(tagString, ",");
-                while (stTags.countTokens() >0){
-                    newReceipt.addTag(new Tag(stTags.nextToken()));
-                }
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
 
                 returnList.add(newReceipt);
             }while(cursor.moveToNext());
@@ -318,10 +356,8 @@ public class Database extends SQLiteOpenHelper{
                 ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
                 String tagString = cursor.getString(10);
 
-                StringTokenizer stTags = new StringTokenizer(tagString, ",");
-                while (stTags.countTokens() >0){
-                    newReceipt.addTag(new Tag(stTags.nextToken()));
-                }
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
                 returnList.add(newReceipt);
             }while(cursor.moveToNext());
         }
@@ -365,10 +401,8 @@ public class Database extends SQLiteOpenHelper{
                 ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
                 String tagString = cursor.getString(10);
 
-                StringTokenizer stTags = new StringTokenizer(tagString, ",");
-                while (stTags.countTokens() >0){
-                    newReceipt.addTag(new Tag(stTags.nextToken()));
-                }
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
                 returnList.add(newReceipt);
             }while(cursor.moveToNext());
         }
@@ -412,10 +446,8 @@ public class Database extends SQLiteOpenHelper{
                 ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
                 String tagString = cursor.getString(10);
 
-                StringTokenizer stTags = new StringTokenizer(tagString, ",");
-                while (stTags.countTokens() >0){
-                    newReceipt.addTag(new Tag(stTags.nextToken()));
-                }
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
                 returnList.add(newReceipt);
             }while(cursor.moveToNext());
         }
@@ -461,13 +493,12 @@ public class Database extends SQLiteOpenHelper{
 
         String tagString = cursor.getString(10);
 
-        StringTokenizer stTags = new StringTokenizer(tagString, ",");
-        while (stTags.countTokens() >0){
-            returnReceipt.addTag(new Tag(stTags.nextToken()));
-        }
+        if (!tagString.equals(""))
+            returnReceipt.setTag(new Tag(tagString));
 
         db.close();
         cursor.close();
+        db.close();
         return returnReceipt;
     }
 
@@ -482,22 +513,18 @@ public class Database extends SQLiteOpenHelper{
         if (cursor.moveToFirst()){
             db.close();
             cursor.close();
+            db.close();
             return true;
         }
         else{
             db.close();
             cursor.close();
+            db.close();
             return false;
         }
     }
 
-//    public boolean deleteTag(String tagName){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String queryStringTag = "DELETE FROM " + TAGS_TABLE + " WHERE " + COLUMN_TAG_NAME + " = " + tagName;
-//        Cursor cursor = db.rawQuery(queryStringTag, null);
-//        cursor.close();
-//        //To Finish
-//    }
+
 
     public boolean deleteAll(){
 
@@ -509,11 +536,13 @@ public class Database extends SQLiteOpenHelper{
         if (cursor.moveToFirst()){
             db.close();
             cursor.close();
+            db.close();
             return true;
         }
         else{
             db.close();
             cursor.close();
+            db.close();
             return false;
         }
     }
