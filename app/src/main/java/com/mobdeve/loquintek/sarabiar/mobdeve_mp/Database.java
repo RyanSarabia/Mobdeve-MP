@@ -5,9 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +27,7 @@ import java.util.StringTokenizer;
 public class Database extends SQLiteOpenHelper{
 
     public static final String RECEIPTS_TABLE = "RECEIPTS_TABLE";
+    public static final String TAGS_TABLE = "TAGS_TABLE";
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_MERCHANT_NAME = "COLUMN_MERCHANT_NAME";
     public static final String COLUMN_MERCHANT_ADDRESS = "COLUMN_MERCHANT_ADDRESS";
@@ -31,6 +39,7 @@ public class Database extends SQLiteOpenHelper{
     public static final String COLUMN_DATE = "COLUMN_DATE";
     public static final String COLUMN_SERIAL_NUMBER = "COLUMN_SERIAL_NUMBER";
     public static final String COLUMN_TAGS = "COLUMN_TAGS";
+    public static final String COLUMN_TAG_NAME = "COLUMN_TAGS_NAMES";
 
     public Database(@Nullable Context context) {
         super(context, "receipts.db", null, 1);
@@ -40,8 +49,9 @@ public class Database extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) { //creates new database
 
         String createTableStatement = "CREATE TABLE " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
-
+        String createTableStatement2 = "CREATE TABLE " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
         db.execSQL(createTableStatement);
+        db.execSQL(createTableStatement2);
     }
 
     @Override
@@ -55,7 +65,6 @@ public class Database extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
-
         db.execSQL(createTableStatement);
         ContentValues cv = new ContentValues();
 
@@ -74,10 +83,59 @@ public class Database extends SQLiteOpenHelper{
         cv.put(COLUMN_SERIAL_NUMBER, receiptModel.getSerialNumber());
 
         long insert = db.insert(RECEIPTS_TABLE, null,cv);
-        if (insert ==-1)
+        if (insert ==-1){
+            db.close();
             return false;
-        else
+        }
+        else{
+            db.close();
             return true;
+        }
+
+    }
+
+    public Boolean addTag(String tagName){
+        //Call function along with updateReceiptTag
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
+        db.execSQL(createTableStatement);
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_TAG_NAME, tagName);
+        long insert = db.insert(TAGS_TABLE, null,cv);
+        if (insert ==-1){
+            db.close();
+            return false;
+        }
+        else{
+            db.close();
+            return true;
+        }
+
+
+    }
+
+    public void updateReceiptTag(String updateSerialNumber, String tagName){
+        //Call function along with addTag
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        String queryString = "SELECT FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        String tagString = cursor.getString(10);
+        cursor.close();
+        tagString = tagString.concat("," + tagName);
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + tagString+  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+
+        db.execSQL(updateString);
+        db.close();
+
     }
 
     public Boolean addDummyReceipt(){
@@ -106,10 +164,6 @@ public class Database extends SQLiteOpenHelper{
         cv1.put(COLUMN_SERIAL_NUMBER, "12345678911234");
 
         db.insert(RECEIPTS_TABLE, null,cv1);
-//        if (insert ==-1)
-//            return false;
-//        else
-//            return true;
 
         cv2.put(COLUMN_MERCHANT_NAME, "Shakey's");
         cv2.put(COLUMN_MERCHANT_ADDRESS, "Here, 2nd street, Los Angeles, Manila");
@@ -124,10 +178,16 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_SERIAL_NUMBER, "98765432112345");
 
         long insert = db.insert(RECEIPTS_TABLE, null,cv2);
-        if (insert ==-1)
+        if (insert ==-1){
+            db.close();
             return false;
-        else
+        }
+
+        else{
+            db.close();
             return true;
+        }
+
     }
 
     public List<ReceiptModel> getAll(){
@@ -174,6 +234,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -221,6 +282,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -267,6 +329,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -313,6 +376,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -359,6 +423,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -367,12 +432,13 @@ public class Database extends SQLiteOpenHelper{
 
         ReceiptModel returnReceipt;
 
-        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
+        String queryString = "SELECT FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
         cursor.moveToFirst();
+
         int receiptID = cursor.getInt(0);
         String merchantName = cursor.getString(1);
         String merchantAddress = cursor.getString(2);
@@ -400,10 +466,11 @@ public class Database extends SQLiteOpenHelper{
             returnReceipt.addTag(new Tag(stTags.nextToken()));
         }
 
-
+        db.close();
         cursor.close();
         return returnReceipt;
     }
+
 
     public boolean deleteOne (String deleteSerialNumber){
 
@@ -413,14 +480,24 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             return false;
         }
     }
+
+//    public boolean deleteTag(String tagName){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String queryStringTag = "DELETE FROM " + TAGS_TABLE + " WHERE " + COLUMN_TAG_NAME + " = " + tagName;
+//        Cursor cursor = db.rawQuery(queryStringTag, null);
+//        cursor.close();
+//        //To Finish
+//    }
 
     public boolean deleteAll(){
 
@@ -430,14 +507,40 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             return false;
         }
-
     }
+
+    private void exportDB(){
+        File sd = Environment.getExternalStorageDirectory();
+        File data = Environment.getDataDirectory();
+        FileChannel source=null;
+        FileChannel destination=null;
+        String currentDBPath = "/data/"+ "com.mobdeve.loquintek.sarabiar.mobdeve_mp" +"/databases/receipts.db";
+        String backupDBPath = "receipts.db";
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
 }
