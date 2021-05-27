@@ -162,8 +162,9 @@ public class Database extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
-
+        String createTableStatementTags = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
         db.execSQL(createTableStatement);
+        db.execSQL(createTableStatementTags);
         ContentValues cv1 = new ContentValues();
         ContentValues cv2 = new ContentValues();
 
@@ -256,10 +257,13 @@ public class Database extends SQLiteOpenHelper{
 
     public List<Tag> getAllTags(){
         List<Tag> returnTagList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
+        db.execSQL(createTableStatement);
 
         String queryString = "SELECT * FROM " + TAGS_TABLE;
 
-        SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
