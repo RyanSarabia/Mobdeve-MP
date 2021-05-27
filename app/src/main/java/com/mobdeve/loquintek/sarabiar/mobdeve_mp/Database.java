@@ -464,14 +464,14 @@ public class Database extends SQLiteOpenHelper{
 
         ReceiptModel returnReceipt;
 
-        String queryString = "SELECT FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
+        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
         cursor.moveToFirst();
 
-        int receiptID = cursor.getInt(0);
+        int receiptID = cursor.getInt(  0);
         String merchantName = cursor.getString(1);
         String merchantAddress = cursor.getString(2);
         String items = cursor.getString(3);
@@ -530,8 +530,10 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
         String queryString = "DROP TABLE " + RECEIPTS_TABLE;
+        String queryStringTags = "DROP TABLE " + TAGS_TABLE;
 
         Cursor cursor = db.rawQuery(queryString, null);
+        cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
             db.close();
@@ -541,6 +543,28 @@ public class Database extends SQLiteOpenHelper{
         }
         else{
             db.close();
+            cursor.close();
+            db.close();
+            return false;
+        }
+    }
+
+    public boolean deleteAllTags(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String queryString = "DROP TABLE " + TAGS_TABLE;
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if (cursor.moveToFirst()){
+
+            cursor.close();
+            db.close();
+            return true;
+        }
+        else{
+
             cursor.close();
             db.close();
             return false;
