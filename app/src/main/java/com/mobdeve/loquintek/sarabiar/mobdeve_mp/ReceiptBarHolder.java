@@ -1,5 +1,6 @@
 package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -62,7 +63,8 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ReceiptActivity.class);
                 intent.putExtra("SERIAL_NO", receiptBarSerialNo);
-                v.getContext().startActivity(intent);
+                intent.putExtra("POSITION", ReceiptBarHolder.this.getAdapterPosition());
+                ((Activity)v.getContext()).startActivityForResult(intent, 1);
             }
         });
     }
@@ -116,7 +118,6 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
                 dialog.dismiss();
             }
         });
-
 
     }
 }

@@ -48,5 +48,9 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         notifyItemInserted(receiptList.size()-1);
     }
 
+    public void removeItem(int position) {
+        receiptList.remove(position);
+    }
+
 
 }

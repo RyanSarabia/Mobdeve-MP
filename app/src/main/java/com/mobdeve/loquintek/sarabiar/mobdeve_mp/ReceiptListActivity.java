@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,8 +57,6 @@ public class ReceiptListActivity extends AppCompatActivity {
 //        addItem("Hello", "June 12, 2020", "Pagkain", 10.00, "A123985123");
 
         Database db = new Database(this);
-//        db.deleteAll();
-//        db.addDummyReceipt();
         receipts = db.getAll();
 
         @SuppressLint("SimpleDateFormat") Format formatter = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
@@ -74,6 +75,7 @@ public class ReceiptListActivity extends AppCompatActivity {
                 total += Float.parseFloat(stPrices.nextToken());
             }
 
+            Log.d("RECEIPT LIST", "NAGCCREATE");
             addItem(merchant, date, items, total, serial);
         }
 
@@ -83,28 +85,23 @@ public class ReceiptListActivity extends AppCompatActivity {
         adapter.addItem(storeName, date, items, total, serial);
     }
 
-//    public void createTagDialog() {
-//        dialogBuilder = new AlertDialog.Builder(this);
-//        final View tagPopupView = getLayoutInflater().inflate(R.layout.tag_popup_layout, null);
-//
-//        popupTagEt = tagPopupView.findViewById(R.id.popupTagEt);
-//        popupDoneBtn = tagPopupView.findViewById(R.id.popupDoneBtn);
-//
-////        fill tablelayout with chips
-//
-//        dialogBuilder.setView(tagPopupView);
-//        dialog = dialogBuilder.create();
-//        dialog.show();
-//
-//        popupDoneBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                if (data.getBooleanExtra("IS_DELETE", false)) {
+                    int receipt_position = data.getIntExtra("POSITION", 0);
+                    Log.d("RECEIPT LIST", "position: " + receipt_position);
+                    this.receipts.remove(receipt_position);
+                    adapter.removeItem(receipt_position);
+                    adapter.notifyItemRemoved(receipt_position);
+//                    adapter.notifyItemRangeChanged(receipt_position, receipts.size());
+                }
+            }
+        }
+    }
 
 
 }

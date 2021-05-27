@@ -96,8 +96,8 @@ public class Database extends SQLiteOpenHelper{
         cv1.put(COLUMN_ITEMS, "Catether,Breastplate,Paintball");
         cv1.put(COLUMN_UNIT_PRICES, "100.5,20.2,10000");
         cv1.put(COLUMN_ITEM_QUANTITIES, "1,1,200");
-        cv1.put(COLUMN_VAT, "10.5,2.2,100");
-        cv1.put(COLUMN_VATABLE, "90,18,9900");
+        cv1.put(COLUMN_VAT, "10.5");
+        cv1.put(COLUMN_VATABLE, "90");
         cv1.put(COLUMN_TAGS, "");
 
         String pattern = "yyyy-MM-dd";
@@ -116,8 +116,8 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_ITEMS, "Klean Kanteen,Golden Rings");
         cv2.put(COLUMN_UNIT_PRICES, "1500,500000");
         cv2.put(COLUMN_ITEM_QUANTITIES, "1,5");
-        cv2.put(COLUMN_VAT, "150,50000");
-        cv2.put(COLUMN_VATABLE, "1350,450000");
+        cv2.put(COLUMN_VAT, "150");
+        cv2.put(COLUMN_VATABLE, "1350");
         cv2.put(COLUMN_TAGS, "");
 
         cv2.put(COLUMN_DATE, "2021-03-15");
