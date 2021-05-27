@@ -151,10 +151,10 @@ public class ReceiptModel {
         String tagString ="";
         for (int i =0; i < receiptTags.size(); i++){
             if (i != receiptTags.size()-1){
-                tagString.concat(receiptTags.get(i).getTagName()+",");
+                tagString = tagString.concat(receiptTags.get(i).getTagName()+",");
             }
             else{
-                tagString.concat(receiptTags.get(i).getTagName());
+                tagString = tagString.concat(receiptTags.get(i).getTagName());
             }
         }
         return tagString;
@@ -166,7 +166,7 @@ public class ReceiptModel {
 
     public void deleteTag(Tag deleteTag){
         for (int i =0; i<receiptTags.size();i++){
-            if(receiptTags.get(i).getTagName() == deleteTag.getTagName()){
+            if(receiptTags.get(i).getTagName().equals(deleteTag.getTagName()) ){
                 receiptTags.remove(i);
                 break;
             }
