@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         portMv = findViewById(R.id.portMv);
         QRButton = findViewById(R.id.QRButton);
 
+        Database db = new Database(this);
+        db.deleteAll();
+        db.addDummyReceipt();
+
         receiptsMv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

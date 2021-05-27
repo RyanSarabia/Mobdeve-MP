@@ -91,6 +91,7 @@ public class Database extends SQLiteOpenHelper{
             db.close();
             return true;
         }
+
     }
 
     public Boolean addTag(String tagName){
@@ -112,6 +113,7 @@ public class Database extends SQLiteOpenHelper{
             db.close();
             return true;
         }
+
     }
 
     public void updateTagName(String newTagName, String oldTagName){
@@ -139,6 +141,7 @@ public class Database extends SQLiteOpenHelper{
 
         db.execSQL(updateString);
         db.close();
+
     }
 
     public void deleteTag(String tagName){
@@ -150,6 +153,7 @@ public class Database extends SQLiteOpenHelper{
         String queryStringReceipt = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS +  " = " + emptyString+ " WHERE " + COLUMN_TAGS + " = " + tagName;
         db.execSQL(queryStringReceipt);
         db.close();
+
     }
 
     public Boolean addDummyReceipt(){
@@ -168,8 +172,8 @@ public class Database extends SQLiteOpenHelper{
         cv1.put(COLUMN_ITEMS, "Catether,Breastplate,Paintball");
         cv1.put(COLUMN_UNIT_PRICES, "100.5,20.2,10000");
         cv1.put(COLUMN_ITEM_QUANTITIES, "1,1,200");
-        cv1.put(COLUMN_VAT, "10.5,2.2,100");
-        cv1.put(COLUMN_VATABLE, "90,18,9900");
+        cv1.put(COLUMN_VAT, "10.5");
+        cv1.put(COLUMN_VATABLE, "90");
         cv1.put(COLUMN_TAGS, "");
 
         String pattern = "yyyy-MM-dd";
@@ -184,8 +188,8 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_ITEMS, "Klean Kanteen,Golden Rings");
         cv2.put(COLUMN_UNIT_PRICES, "1500,500000");
         cv2.put(COLUMN_ITEM_QUANTITIES, "1,5");
-        cv2.put(COLUMN_VAT, "150,50000");
-        cv2.put(COLUMN_VATABLE, "1350,450000");
+        cv2.put(COLUMN_VAT, "150");
+        cv2.put(COLUMN_VATABLE, "1350");
         cv2.put(COLUMN_TAGS, "");
 
         cv2.put(COLUMN_DATE, "2021-03-15");
@@ -201,6 +205,7 @@ public class Database extends SQLiteOpenHelper{
             db.close();
             return true;
         }
+
     }
 
     public List<ReceiptModel> getAll(){
@@ -315,6 +320,7 @@ public class Database extends SQLiteOpenHelper{
             //Nothing in db, do not add anything to returnList
         }
         cursor.close();
+        db.close();
         return returnList;
     }
 
@@ -490,7 +496,7 @@ public class Database extends SQLiteOpenHelper{
         if (!tagString.equals(""))
             returnReceipt.setTag(new Tag(tagString));
 
-
+        db.close();
         cursor.close();
         db.close();
         return returnReceipt;
@@ -505,11 +511,13 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             db.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             db.close();
             return false;
@@ -526,11 +534,13 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
+            db.close();
             cursor.close();
             db.close();
             return true;
         }
         else{
+            db.close();
             cursor.close();
             db.close();
             return false;
