@@ -19,7 +19,7 @@ public class ReceiptModel {
     private Float vatablePrice;
     private Date date;
     private String serialNumber;
-    private ArrayList<Tag> receiptTags = new ArrayList<>();
+    private Tag receiptTag;
 
     public ReceiptModel(int id, String merchantName, String merchantAddress, String items, String unitPrices, String itemQuantities, Float vatPrice, Float vatablePrice, Date date, String serialNumber) {
 
@@ -147,29 +147,24 @@ public class ReceiptModel {
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
-    public String getTagsAsString(){
-        String tagString ="";
-        for (int i =0; i < receiptTags.size(); i++){
-            if (i != receiptTags.size()-1){
-                tagString = tagString.concat(receiptTags.get(i).getTagName()+",");
-            }
-            else{
-                tagString = tagString.concat(receiptTags.get(i).getTagName());
-            }
-        }
-        return tagString;
+    public String getTagAsString(){
+
+        return receiptTag.getTagName();
+    }
+
+    public void setTag(Tag newTag){
+        this.receiptTag = newTag;
     }
 
     public void addTag(Tag newTag){
-        receiptTags.add(newTag);
+        receiptTag = newTag;
+    }
+
+    public Tag getTag(){
+        return this.receiptTag;
     }
 
     public void deleteTag(Tag deleteTag){
-        for (int i =0; i<receiptTags.size();i++){
-            if(receiptTags.get(i).getTagName().equals(deleteTag.getTagName()) ){
-                receiptTags.remove(i);
-                break;
-            }
-        }
+        this.receiptTag = null;
     }
 }
