@@ -68,7 +68,6 @@ public class QRScannerResult extends AppCompatActivity {
                 boolean success = database.addReceipt(newReceipt);
                 Toast.makeText(QRScannerResult.this, "Success = " + success, Toast.LENGTH_SHORT).show();
             }
-
         });
 
         showReceipt.setOnClickListener(new View.OnClickListener() {

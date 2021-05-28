@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItemView tagMv;
 
     private Button QRButton;
+    private Button exportButtton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         tagMv = findViewById(R.id.tagMv);
 
         QRButton = findViewById(R.id.QRButton);
+        exportButtton = findViewById(R.id.exportButton);
 
         Database db = new Database(this);
         db.deleteAll();
@@ -60,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goToScanner = new Intent(getApplicationContext(), QRScanner.class);
                 MainActivity.this.startActivity(goToScanner);
+            }
+        });
+
+        exportButtton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Database database = new Database(MainActivity.this);
+                database.exportDB();
+                database.close();
             }
         });
 
