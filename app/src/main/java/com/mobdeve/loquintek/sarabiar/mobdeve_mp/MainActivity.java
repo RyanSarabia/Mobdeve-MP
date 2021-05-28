@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onClick(View v) {
 //                Database database = new Database(MainActivity.this);
-//                database.exportDB();
 //                database.close();
 //            }
 //        });

@@ -70,7 +70,8 @@ public class ReceiptListActivity extends AppCompatActivity {
         receiptListSv = findViewById(R.id.receiptListSv);
         filterRg = findViewById(R.id.filterRg);
         sortRg = findViewById(R.id.sortRg);
-
+        isMerchant = true;
+        isAscending = false;
         Database db = new Database(this);
 
 //        if(savedInstanceState != null) {
@@ -135,6 +136,7 @@ public class ReceiptListActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 receipts.clear();
                 receipts = db.searchFilteredReceipts(query, isMerchant, -1, -1, isAscending);
+
                 populateAdapter(receipts);
                 return false;
             }

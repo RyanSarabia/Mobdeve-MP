@@ -149,7 +149,7 @@ public class ReceiptModel {
     }
     public String getTagAsString(){
         if (receiptTag == null) {
-            return null;
+            return "";
         }
         return receiptTag.getTagName();
     }
