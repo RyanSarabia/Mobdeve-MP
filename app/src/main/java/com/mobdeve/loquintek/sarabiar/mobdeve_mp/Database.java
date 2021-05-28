@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -512,6 +513,108 @@ public class Database extends SQLiteOpenHelper{
         return returnList;
     }
 
+    public List<ReceiptModel> searchFilteredReceipts(String input, boolean isMerchant, int day, int year, boolean isAscending){
+
+        List<ReceiptModel> returnList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "";
+        if (isMerchant && isAscending){
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE;
+        }
+        else if (isMerchant && !isAscending){
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE + " DESC";
+        }
+        else if (!isMerchant && isAscending){
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY " + COLUMN_DATE;
+        }
+        else{
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY "+ COLUMN_DATE + " DESC";
+        }
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+
+        if (cursor.moveToFirst()){
+            do{
+                int receiptID = cursor.getInt(0);
+                String merchantName = cursor.getString(1);
+                String merchantAddress = cursor.getString(2);
+                String items = cursor.getString(3);
+                String unitPrices = cursor.getString(4);
+                String itemQuantities = cursor.getString(5);
+                Float vatPrice = cursor.getFloat(6);
+                Float vatablePrice = cursor.getFloat(7);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                Date date = new Date();
+                try{
+                    date = dateFormat.parse(cursor.getString(8));
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                }
+                String serialNumber = cursor.getString(9);
+
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                String tagString = cursor.getString(10);
+
+                if (!tagString.equals(""))
+                    newReceipt.setTag(new Tag(tagString));
+                returnList.add(newReceipt);
+            }while(cursor.moveToNext());
+        }
+        else{
+            //Nothing in db, do not add anything to returnList
+        }
+        Date currDate;
+        ArrayList<ReceiptModel> filteredReturnList = new ArrayList<>();
+        if (day!= -1 && year != -1){
+            for (int i =0 ; i<returnList.size(); i++){
+                currDate = returnList.get(i).getDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currDate);
+                if (calendar.get(Calendar.YEAR) != year){
+                    break;
+                }
+                else if (calendar.get(Calendar.DATE)!= day){
+                    break;
+                }
+                filteredReturnList.add(returnList.get(i));
+            }
+        }
+
+        else if (day != -1 && year == -1){
+            for (int i =0 ; i<returnList.size(); i++){
+                currDate = returnList.get(i).getDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currDate);
+                if (calendar.get(Calendar.DATE)!= day){
+                    break;
+                }
+                filteredReturnList.add(returnList.get(i));
+            }
+        }
+
+        else if (day == -1 && year != -1){
+            for (int i =0 ; i<returnList.size(); i++){
+                currDate = returnList.get(i).getDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currDate);
+                if (calendar.get(Calendar.YEAR) != year){
+                    break;
+                }
+                filteredReturnList.add(returnList.get(i));
+            }
+        }
+
+        else{
+                filteredReturnList.addAll(returnList);
+            }
+
+        cursor.close();
+        db.close();
+        return filteredReturnList;
+    }
+
 
 
     public ReceiptModel getOne(String getSerialNumber){
@@ -624,6 +727,8 @@ public class Database extends SQLiteOpenHelper{
             return false;
         }
     }
+
+
 
 //    private void exportDB(){
 //        File sd = Environment.getExternalStorageDirectory();
