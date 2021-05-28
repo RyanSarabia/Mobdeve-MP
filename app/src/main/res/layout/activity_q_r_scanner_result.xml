@@ -84,8 +84,9 @@
         android:layout_marginTop="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vatablePrice" />
+        app:layout_constraintTop_toBottomOf="@+id/amountPaid" />
 
     <TextView
         android:id="@+id/serialNumber"
@@ -101,12 +102,23 @@
         android:id="@+id/saveReceipt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Save Receipt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serialNumber"
-        app:layout_constraintVertical_bias="0.151" />
+        app:layout_constraintVertical_bias="0.226" />
+
+    <TextView
+        android:id="@+id/amountPaid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vatablePrice" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

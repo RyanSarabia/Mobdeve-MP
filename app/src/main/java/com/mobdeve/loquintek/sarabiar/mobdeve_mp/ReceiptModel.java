@@ -17,11 +17,12 @@ public class ReceiptModel {
     private String itemQuantities;
     private Float vatPrice;
     private Float vatablePrice;
+    private Float amountPaid;
     private Date date;
     private String serialNumber;
     private Tag receiptTag;
 
-    public ReceiptModel(int id, String merchantName, String merchantAddress, String items, String unitPrices, String itemQuantities, Float vatPrice, Float vatablePrice, Date date, String serialNumber) {
+    public ReceiptModel(int id, String merchantName, String merchantAddress, String items, String unitPrices, String itemQuantities, Float vatPrice, Float vatablePrice, Date date, String serialNumber, Float amountPaid) {
 
 //        StringTokenizer stItems = new StringTokenizer(items, ",");
 //        StringTokenizer stUnitPrices = new StringTokenizer(unitPrices, ",");
@@ -50,6 +51,7 @@ public class ReceiptModel {
         this.vatablePrice = vatablePrice;
         this.date = date;
         this.serialNumber = serialNumber;
+        this.amountPaid = amountPaid;
     }
 
     @Override
@@ -168,5 +170,13 @@ public class ReceiptModel {
 
     public void deleteTag(Tag deleteTag){
         this.receiptTag = null;
+    }
+
+    public Float getAmountPaid() {
+        return amountPaid;
+    }
+
+    public void setAmountPaid(Float amountPaid) {
+        this.amountPaid = amountPaid;
     }
 }

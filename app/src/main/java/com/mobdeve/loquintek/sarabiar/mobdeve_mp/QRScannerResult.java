@@ -24,7 +24,7 @@ public class QRScannerResult extends AppCompatActivity {
     private String jsonString;
     private JSONObject jsonObject;
 
-    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber;
+    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid;
     private Button saveReceipt;
 
     private Date receiptDate;
@@ -44,6 +44,8 @@ public class QRScannerResult extends AppCompatActivity {
         this.saveReceipt = findViewById(R.id.saveReceipt);
         this.date = findViewById(R.id.date);
         this.serialNumber = findViewById(R.id.serialNumber);
+        this.amountPaid = findViewById(R.id.amountPaid);
+
 
 
         saveReceipt.setOnClickListener(new View.OnClickListener() {
@@ -56,8 +58,9 @@ public class QRScannerResult extends AppCompatActivity {
                                                                 itemQuantities.getText().toString(),
                                                                 Float.parseFloat(vatPrice.getText().toString()),
                                                                 Float.parseFloat(vatablePrice.getText().toString()),
-                                                                 receiptDate,
-                                                                serialNumber.getText().toString());
+                                                                receiptDate,
+                                                                serialNumber.getText().toString(),
+                                                                Float.parseFloat(amountPaid.getText().toString()));
 
                 Database database = new Database(QRScannerResult.this);
 
@@ -81,6 +84,7 @@ public class QRScannerResult extends AppCompatActivity {
             vatablePrice.setText(jsonObject.getString("vatablePrice"));
             date.setText(jsonObject.getString("date"));
             serialNumber.setText(jsonObject.getString("serialNumber"));
+            amountPaid.setText(jsonObject.getString("amountPaid"));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             try{
                 this.receiptDate = dateFormat.parse(date.getText().toString());
