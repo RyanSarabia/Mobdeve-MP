@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,8 +29,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private TextView receiptBarItemsTv;
     private TextView receiptBarTotalTv;
     private Chip receiptBarTagChp;
-    private Button receiptBarSettingsBtn;
-    private Button receiptBarTagBtn;
+    private ImageButton receiptBarTagBtn;
     private String receiptBarSerialNo;
 
     private AlertDialog.Builder dialogBuilder;
@@ -54,7 +54,6 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         receiptBarDateTv = view.findViewById(R.id.receiptBarDateTv);
         receiptBarItemsTv = view.findViewById(R.id.receiptBarItemsTv);
         receiptBarTotalTv = view.findViewById(R.id.receiptBarTotalTv);
-        receiptBarSettingsBtn = view.findViewById(R.id.receiptBarSettingsBtn);
         receiptBarTagBtn = view.findViewById(R.id.receiptBarTagBtn);
         receiptBarTagChp = view.findViewById(R.id.receiptTagChp);
 
@@ -62,6 +61,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         tags = db.getAllTags();
         populateTagMenu();
         dataAdapter =  new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tagNames);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         numFormatter = new DecimalFormat("#0.00");
         this.context = context;
@@ -79,10 +79,12 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ReceiptActivity.class);
                 intent.putExtra("SERIAL_NO", receiptBarSerialNo);
+                intent.putExtra("TOTAL", receiptBarTotalTv.getText().toString());
                 intent.putExtra("POSITION", ReceiptBarHolder.this.getAdapterPosition());
                 ((Activity)v.getContext()).startActivityForResult(intent, 1);
             }
         });
+
     }
 
     public void setReceiptBarStoreTv(String storeName) {
@@ -99,11 +101,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
 
     public void setReceiptBarTotalTv(double total) {
 
-        this.receiptBarTotalTv.setText(numFormatter.format(total));
-    }
-
-    public void setReceiptBarSettingsBtn(Button receiptBarSettingsBtn) {
-        this.receiptBarSettingsBtn = receiptBarSettingsBtn;
+        this.receiptBarTotalTv.setText("Php " + numFormatter.format(total));
     }
 
     public void setReceiptBarSerialNo(String serialNo) {
@@ -111,7 +109,10 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     }
 
     public void setReceiptBarTagChp(String tagName) {
-        this.receiptBarTagChp.setText(tagName);
+        if (tagName != null && tagName.length() > 0)
+            this.receiptBarTagChp.setText(tagName);
+        else
+            this.receiptBarTagChp.setText("N/A");
     }
 
     private void createTagDialog() {
@@ -125,8 +126,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         popupTagSp.setAdapter(dataAdapter);
 
         String tagName = receiptBarTagChp.getText().toString();
-        if (tagName != null && tagName != "") {
-            Log.d("receipt holder", "tag name:" + tagName);
+        if (tagName.compareTo("N/A") != 0) {
             setTagMenuDefault(tagName);
         }
 
