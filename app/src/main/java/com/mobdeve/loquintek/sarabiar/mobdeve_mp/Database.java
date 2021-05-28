@@ -41,6 +41,7 @@ public class Database extends SQLiteOpenHelper{
     public static final String COLUMN_SERIAL_NUMBER = "COLUMN_SERIAL_NUMBER";
     public static final String COLUMN_TAGS = "COLUMN_TAGS";
     public static final String COLUMN_TAG_NAME = "COLUMN_TAGS_NAMES";
+    public static final String COLUMN_AMOUNT_PAID = "COLUMN_AMOUNT_PAID";
 
     public Database(@Nullable Context context) {
         super(context, "receipts.db", null, 1);
@@ -49,7 +50,7 @@ public class Database extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) { //creates new database
 
-        String createTableStatement = "CREATE TABLE " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
+        String createTableStatement = "CREATE TABLE " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " TEXT)";
         String createTableStatement2 = "CREATE TABLE " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
         db.execSQL(createTableStatement);
         db.execSQL(createTableStatement2);
@@ -65,7 +66,7 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " TEXT)";
         db.execSQL(createTableStatement);
         ContentValues cv = new ContentValues();
 
@@ -167,7 +168,7 @@ public class Database extends SQLiteOpenHelper{
 
         db.execSQL(createTableStatementTags);
 
-        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " TEXT)";
         db.execSQL(createTableStatement);
         db.execSQL(createTableStatementTags);
         ContentValues cv1 = new ContentValues();
@@ -181,6 +182,7 @@ public class Database extends SQLiteOpenHelper{
         cv1.put(COLUMN_VAT, "10.5");
         cv1.put(COLUMN_VATABLE, "90");
         cv1.put(COLUMN_TAGS, "");
+        cv1.put(COLUMN_AMOUNT_PAID, "10000");
 
         String pattern = "yyyy-MM-dd";
         DateFormat df = new SimpleDateFormat(pattern, Locale.US);
@@ -197,6 +199,7 @@ public class Database extends SQLiteOpenHelper{
         cv2.put(COLUMN_VAT, "150");
         cv2.put(COLUMN_VATABLE, "1350");
         cv2.put(COLUMN_TAGS, "");
+        cv2.put(COLUMN_AMOUNT_PAID, "501000");
 
         cv2.put(COLUMN_DATE, "2021-03-15");
         cv2.put(COLUMN_SERIAL_NUMBER, "98765432112345");
@@ -242,8 +245,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -315,8 +319,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -361,8 +366,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -406,8 +412,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -451,8 +458,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -496,8 +504,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -553,8 +562,9 @@ public class Database extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
                 String serialNumber = cursor.getString(9);
+                Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+                ReceiptModel newReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
                 String tagString = cursor.getString(10);
 
                 if (!tagString.equals(""))
@@ -565,54 +575,9 @@ public class Database extends SQLiteOpenHelper{
         else{
             //Nothing in db, do not add anything to returnList
         }
-        Date currDate;
-        ArrayList<ReceiptModel> filteredReturnList = new ArrayList<>();
-        if (day!= -1 && year != -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.YEAR) != year){
-                    break;
-                }
-                else if (calendar.get(Calendar.DATE)!= day){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
-
-        else if (day != -1 && year == -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.DATE)!= day){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
-
-        else if (day == -1 && year != -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.YEAR) != year){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
-
-        else{
-                filteredReturnList.addAll(returnList);
-            }
-
         cursor.close();
         db.close();
-        return filteredReturnList;
+        return returnList;
     }
 
 
@@ -645,8 +610,9 @@ public class Database extends SQLiteOpenHelper{
             e.printStackTrace();
         }
         String serialNumber = cursor.getString(9);
+        Float amountPaid = Float.parseFloat(cursor.getString(11));
 
-        returnReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber);
+        returnReceipt = new ReceiptModel(receiptID, merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid);
 
         String tagString = cursor.getString(10);
 

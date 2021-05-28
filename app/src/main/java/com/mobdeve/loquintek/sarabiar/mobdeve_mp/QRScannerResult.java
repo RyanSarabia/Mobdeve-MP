@@ -24,11 +24,8 @@ public class QRScannerResult extends AppCompatActivity {
     private String jsonString;
     private JSONObject jsonObject;
 
-    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber;
+    private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid;
     private Button saveReceipt;
-    private Button showReceipt;
-    private Button showReceiptByDate;
-    private Button deleteAll;
     private Date receiptDate;
 
     @Override
@@ -44,11 +41,10 @@ public class QRScannerResult extends AppCompatActivity {
         this.vatPrice = findViewById(R.id.vatPrice);
         this.vatablePrice = findViewById(R.id.vatablePrice);
         this.saveReceipt = findViewById(R.id.saveReceipt);
-        this.showReceipt = findViewById(R.id.temporaryViewSaved);
         this.date = findViewById(R.id.date);
         this.serialNumber = findViewById(R.id.serialNumber);
-        this.deleteAll = findViewById(R.id.deleteAll);
-        this.showReceiptByDate = findViewById(R.id.sortedByDate);
+        this.amountPaid = findViewById(R.id.amountPaid);
+
 
         saveReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +56,9 @@ public class QRScannerResult extends AppCompatActivity {
                                                                 itemQuantities.getText().toString(),
                                                                 Float.parseFloat(vatPrice.getText().toString()),
                                                                 Float.parseFloat(vatablePrice.getText().toString()),
-                                                                 receiptDate,
-                                                                serialNumber.getText().toString());
+                                                                receiptDate,
+                                                                serialNumber.getText().toString(),
+                                                                Float.parseFloat(amountPaid.getText().toString()));
 
                 Database database = new Database(QRScannerResult.this);
 
@@ -69,36 +66,6 @@ public class QRScannerResult extends AppCompatActivity {
                 Toast.makeText(QRScannerResult.this, "Success = " + success, Toast.LENGTH_SHORT).show();
             }
         });
-
-        showReceipt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Database db = new Database(QRScannerResult.this);
-                List<ReceiptModel> receipts = db.getAll();
-
-                Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        showReceiptByDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Database db = new Database(QRScannerResult.this);
-                List<ReceiptModel> receipts = db.getAllByDateAscending();
-
-                Toast.makeText(QRScannerResult.this, receipts.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        deleteAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Database db = new Database(QRScannerResult.this);
-                boolean result = db.deleteAll();
-
-            }
-        });
-        //deleteAll.setEnabled(false);
 
         Intent fromScanner = getIntent();
         this.jsonString = fromScanner.getStringExtra("JSONString");
@@ -115,6 +82,7 @@ public class QRScannerResult extends AppCompatActivity {
             vatablePrice.setText(jsonObject.getString("vatablePrice"));
             date.setText(jsonObject.getString("date"));
             serialNumber.setText(jsonObject.getString("serialNumber"));
+            amountPaid.setText(jsonObject.getString("amountPaid"));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             try{
                 this.receiptDate = dateFormat.parse(date.getText().toString());

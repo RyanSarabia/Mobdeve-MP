@@ -65,14 +65,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        exportButtton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Database database = new Database(MainActivity.this);
-                database.exportDB();
-                database.close();
-            }
-        });
+//        exportButtton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Database database = new Database(MainActivity.this);
+//                database.exportDB();
+//                database.close();
+//            }
+//        });
 
     }
 
