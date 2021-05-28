@@ -28,7 +28,7 @@ public class Tag {
             return true;
         }
 
-        if ((tag instanceof Tag) && (((Tag) tag).getTagName().toLowerCase().compareTo(this.tagName.toLowerCase()) == 0)) {
+        if ((tag instanceof Tag) && (((Tag) tag).getTagName().toLowerCase().trim().compareTo(this.tagName.toLowerCase().trim()) == 0)) {
             return true;
         } else {
             return false;
