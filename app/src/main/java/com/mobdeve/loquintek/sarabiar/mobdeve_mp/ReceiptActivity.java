@@ -109,7 +109,8 @@ public class ReceiptActivity extends AppCompatActivity {
         String vatable = numFormatter.format(receipt.getVatablePrice());
         String vat = numFormatter.format(receipt.getVatPrice());
         String tag = receipt.getTagAsString();
-
+        String cash = numFormatter.format(receipt.getAmountPaid());
+        String change = numFormatter.format(Double.parseDouble(totalPrice) - receipt.getAmountPaid());
 
         totalTv.setText("TOTAL: " + totalPrice);
         serialTv.setText("Serial No. : " + serialNo);
@@ -119,7 +120,8 @@ public class ReceiptActivity extends AppCompatActivity {
         vatableTv.setText("Vatable: Php " + vatable);
         vatTv.setText("VAT: Php " + vat);
         miniTotalTv.setText("Total: " + totalPrice);
-
+        cashTv.setText("Amount paid: Php" + cash);
+        changeTv.setText("Change: Php" + change);
         if (tag != null && tag.length() > 0) {
             receiptTagChp.setText(tag);
         }
