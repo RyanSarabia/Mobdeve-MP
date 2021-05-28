@@ -10,6 +10,7 @@
         android:id="@+id/receiptsMv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menuItemDescTv="Open receipts"
@@ -20,19 +21,30 @@
         android:id="@+id/portMv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receiptsMv"
         app:menuItemDescTv="Export and import data"
         app:menuItemNameTv="Import/Export" />
 
+    <com.mobdeve.loquintek.sarabiar.mobdeve_mp.MenuItemView
+        android:id="@+id/tagMv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/portMv"
+        app:menuItemDescTv="Settings for tag"
+        app:menuItemNameTv="Tag Settings" />
+
     <Button
         android:id="@+id/QRButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:text="Scan QR Code"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/portMv" />
+        app:layout_constraintTop_toBottomOf="@+id/tagMv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

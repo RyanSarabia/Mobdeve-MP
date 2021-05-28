@@ -67,6 +67,7 @@ public class ReceiptListActivity extends AppCompatActivity {
             String date = formatter.format(curReceipt.getDate());
             String items = curReceipt.getItems();
             String serial = curReceipt.getSerialNumber();
+            String tag = curReceipt.getTagAsString();
             double total = 0;
 
             StringTokenizer stPrices = new StringTokenizer(curReceipt.getUnitPrices(), ",");
@@ -75,14 +76,13 @@ public class ReceiptListActivity extends AppCompatActivity {
                 total += Float.parseFloat(stPrices.nextToken());
             }
 
-            Log.d("RECEIPT LIST", "NAGCCREATE");
-            addItem(merchant, date, items, total, serial);
+            addItem(merchant, date, items, total, serial, tag);
         }
 
     }
 
-    public void addItem(String storeName, String date, String items, double total, String serial){
-        adapter.addItem(storeName, date, items, total, serial);
+    public void addItem(String storeName, String date, String items, double total, String serial, String tag){
+        adapter.addItem(storeName, date, items, total, serial, tag);
     }
 
     @Override
@@ -98,6 +98,13 @@ public class ReceiptListActivity extends AppCompatActivity {
                     adapter.removeItem(receipt_position);
                     adapter.notifyItemRemoved(receipt_position);
 //                    adapter.notifyItemRangeChanged(receipt_position, receipts.size());
+                }
+
+                else if (data.getBooleanExtra("IS_UPDATE", false)) {
+                    int receipt_position = data.getIntExtra("POSITION", 0);
+                    String tagName = data.getStringExtra("NEW_TAG");
+                    Log.d("RECEIPT LIST", "position: " + receipt_position);
+                    adapter.setTag(receipt_position, tagName);
                 }
             }
         }

@@ -161,9 +161,15 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip5"
+            android:id="@+id/receiptTagChp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/receiptTagBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings" />
     </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MenuItemView receiptsMv;
     private MenuItemView portMv;
+    private MenuItemView tagMv;
+
     private Button QRButton;
 
     @Override
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         receiptsMv = findViewById(R.id.receiptsMv);
         portMv = findViewById(R.id.portMv);
+        tagMv = findViewById(R.id.tagMv);
+
         QRButton = findViewById(R.id.QRButton);
 
         Database db = new Database(this);
@@ -39,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PortActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
+
+        tagMv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TagActivity.class);
                 MainActivity.this.startActivity(intent);
             }
         });

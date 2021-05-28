@@ -36,6 +36,7 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         holder.setReceiptBarItemsTv(receiptList.get(position).getReceiptBarItems());
         holder.setReceiptBarStoreTv(receiptList.get(position).getReceiptBarStore());
         holder.setReceiptBarSerialNo(receiptList.get(position).getReceiptBarSerial());
+        holder.setReceiptBarTagChp(receiptList.get(position).getReceiptBarTag());
     }
 
     @Override
@@ -43,13 +44,18 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         return receiptList.size();
     }
 
-    public void addItem(String storeName, String date, String items, double total, String serial){
-        receiptList.add(new ReceiptBarModel(storeName, date, items, total, serial));
+    public void addItem(String storeName, String date, String items, double total, String serial, String tag){
+        receiptList.add(new ReceiptBarModel(storeName, date, items, total, serial, tag));
         notifyItemInserted(receiptList.size()-1);
     }
 
     public void removeItem(int position) {
         receiptList.remove(position);
+    }
+
+    public void setTag(int position, String tag) {
+        receiptList.get(position).setReceiptBarTag(tag);
+        notifyItemChanged(position);
     }
 
 

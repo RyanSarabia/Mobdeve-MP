@@ -6,16 +6,18 @@ public class ReceiptBarModel {
     private String receiptBarDate;
     private String receiptBarItems;
     private String receiptBarSerial;
+    private String receiptBarTag;
     private double receiptBarTotal;
 //    private Button receiptBarSettings;
 
 
-    public ReceiptBarModel (String storeName, String date, String items, double total, String serial) {
+    public ReceiptBarModel (String storeName, String date, String items, double total, String serial, String tag) {
         receiptBarStore =  storeName;
         receiptBarDate = date;
         receiptBarItems = items;
         receiptBarTotal = total;
         receiptBarSerial = serial;
+        receiptBarTag = tag;
 //        receiptBarSettings =
     }
 
@@ -58,5 +60,13 @@ public class ReceiptBarModel {
 
     public void setReceiptBarSerial(String receiptBarSerial) {
         this.receiptBarSerial = receiptBarSerial;
+    }
+
+    public String getReceiptBarTag() {
+        return receiptBarTag;
+    }
+
+    public void setReceiptBarTag(String receiptBarTag) {
+        this.receiptBarTag = receiptBarTag;
     }
 }

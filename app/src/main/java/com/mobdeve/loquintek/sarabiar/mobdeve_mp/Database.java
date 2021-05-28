@@ -119,7 +119,7 @@ public class Database extends SQLiteOpenHelper{
     public void updateTagName(String newTagName, String oldTagName){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String updateString = "UPDATE " + TAGS_TABLE + " SET " + COLUMN_TAG_NAME + " = " + newTagName+  " WHERE " + COLUMN_TAG_NAME + " = " + oldTagName;
+        String updateString = "UPDATE " + TAGS_TABLE + " SET " + COLUMN_TAG_NAME + " = '" + newTagName+ "'" + " WHERE " + COLUMN_TAG_NAME + " = '" + oldTagName + "'";
         db.execSQL(updateString);
         db.close();
     }
@@ -127,7 +127,7 @@ public class Database extends SQLiteOpenHelper{
     public void updateReceiptsTagName(String newTagName, String oldTagName){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + newTagName+  " WHERE " + COLUMN_TAGS + " = " + oldTagName;
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + newTagName+ "'" + " WHERE " + COLUMN_TAGS + " = '" + oldTagName + "'";
         db.execSQL(updateString);
         db.close();
     }
@@ -137,7 +137,7 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = " + tagName+  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + tagName+ "'" +  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
 
         db.execSQL(updateString);
         db.close();
@@ -146,11 +146,12 @@ public class Database extends SQLiteOpenHelper{
 
     public void deleteTag(String tagName){
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryStringTag = "DELETE FROM " + TAGS_TABLE + " WHERE " + COLUMN_TAG_NAME + " = " + tagName;
+        String queryStringTag = "DELETE FROM " + TAGS_TABLE + " WHERE " + COLUMN_TAG_NAME + " = '" + tagName +"'";
         Cursor cursor = db.rawQuery(queryStringTag, null);
+        cursor.moveToFirst();
         cursor.close();
-        String emptyString = "";
-        String queryStringReceipt = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS +  " = " + emptyString+ " WHERE " + COLUMN_TAGS + " = " + tagName;
+        String emptyString = "''";
+        String queryStringReceipt = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS +  " = " + emptyString + " WHERE " + COLUMN_TAGS + " = '" + tagName + "'";
         db.execSQL(queryStringReceipt);
         db.close();
 
@@ -160,6 +161,10 @@ public class Database extends SQLiteOpenHelper{
         //For adding new receipt into database
 
         SQLiteDatabase db = this.getWritableDatabase();
+
+        String createTableStatementTags = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
+
+        db.execSQL(createTableStatementTags);
 
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
         String createTableStatementTags = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
