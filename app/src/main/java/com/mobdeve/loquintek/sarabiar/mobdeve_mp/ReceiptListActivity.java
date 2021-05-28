@@ -134,7 +134,8 @@ public class ReceiptListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 receipts.clear();
-                receipts = db.getAllByDateDescending();
+                receipts = db.searchFilteredReceipts(query, isMerchant, -1, -1, isAscending);
+
                 populateAdapter(receipts);
                 return false;
             }

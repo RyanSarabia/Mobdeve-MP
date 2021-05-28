@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -162,6 +163,8 @@ public class Database extends SQLiteOpenHelper{
         //For adding new receipt into database
 
         SQLiteDatabase db = this.getWritableDatabase();
+
+        String createTableStatementTags = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
 
         String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT)";
         db.execSQL(createTableStatement);
@@ -514,17 +517,22 @@ public class Database extends SQLiteOpenHelper{
         List<ReceiptModel> returnList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "";
+
         if (isMerchant && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
+            Log.d("ISMERCHANT ISASCENDING", "HERE");
         }
         else if (isMerchant && !isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE + " DESC";
+            Log.d("ISMERCHANT NOTASCENDING", "HERE");
         }
         else if (!isMerchant && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY " + COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
+            Log.d("NOTMERCHANT ISASCENDING", "HERE");
         }
         else{
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY "+ COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
+            Log.d("NOT NOT", "HERE");
         }
 
         Cursor cursor = db.rawQuery(queryString, null);
@@ -561,54 +569,12 @@ public class Database extends SQLiteOpenHelper{
         else{
             //Nothing in db, do not add anything to returnList
         }
-        Date currDate;
-        ArrayList<ReceiptModel> filteredReturnList = new ArrayList<>();
-        if (day!= -1 && year != -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.YEAR) != year){
-                    break;
-                }
-                else if (calendar.get(Calendar.DATE)!= day){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
 
-        else if (day != -1 && year == -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.DATE)!= day){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
-
-        else if (day == -1 && year != -1){
-            for (int i =0 ; i<returnList.size(); i++){
-                currDate = returnList.get(i).getDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currDate);
-                if (calendar.get(Calendar.YEAR) != year){
-                    break;
-                }
-                filteredReturnList.add(returnList.get(i));
-            }
-        }
-
-        else{
-                filteredReturnList.addAll(returnList);
-            }
+        Log.d("ASDJKLASJDKLASJDLASD: ", "" + returnList.size());
 
         cursor.close();
         db.close();
-        return filteredReturnList;
+        return returnList;
     }
 
 
