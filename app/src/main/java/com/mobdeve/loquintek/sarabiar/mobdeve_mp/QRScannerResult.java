@@ -26,6 +26,7 @@ public class QRScannerResult extends AppCompatActivity {
 
     private TextView merchantName, merchantAddress, items, unitPrices, itemQuantities, vatPrice, vatablePrice, date, serialNumber, amountPaid;
     private Button saveReceipt;
+
     private Date receiptDate;
 
     @Override
@@ -44,6 +45,7 @@ public class QRScannerResult extends AppCompatActivity {
         this.date = findViewById(R.id.date);
         this.serialNumber = findViewById(R.id.serialNumber);
         this.amountPaid = findViewById(R.id.amountPaid);
+
 
 
         saveReceipt.setOnClickListener(new View.OnClickListener() {

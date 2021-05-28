@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -164,11 +165,9 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " TEXT)";
         String createTableStatementTags = "CREATE TABLE IF NOT EXISTS " + TAGS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_TAG_NAME + " TEXT)";
 
-        db.execSQL(createTableStatementTags);
-
-        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " TEXT)";
         db.execSQL(createTableStatement);
         db.execSQL(createTableStatementTags);
         ContentValues cv1 = new ContentValues();
@@ -527,17 +526,22 @@ public class Database extends SQLiteOpenHelper{
         List<ReceiptModel> returnList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "";
+
         if (isMerchant && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
+            Log.d("ISMERCHANT ISASCENDING", "HERE");
         }
         else if (isMerchant && !isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" = " + input + " ORDER BY " + COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE + " DESC";
+            Log.d("ISMERCHANT NOTASCENDING", "HERE");
         }
         else if (!isMerchant && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY " + COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
+            Log.d("NOTMERCHANT ISASCENDING", "HERE");
         }
         else{
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + input + " ORDER BY "+ COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
+            Log.d("NOT NOT", "HERE");
         }
 
         Cursor cursor = db.rawQuery(queryString, null);
@@ -575,6 +579,7 @@ public class Database extends SQLiteOpenHelper{
         else{
             //Nothing in db, do not add anything to returnList
         }
+
         cursor.close();
         db.close();
         return returnList;

@@ -98,6 +98,7 @@ public class TagActivity extends AppCompatActivity {
     private void addChip(String tagName) {
         Chip tagChip = new Chip(this);
         tagChip.setText(tagName);
+        tagChip.setTextSize(25);
         tagChip.setCloseIconVisible(true);
         tagChip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override

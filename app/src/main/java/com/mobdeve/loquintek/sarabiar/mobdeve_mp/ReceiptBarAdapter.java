@@ -4,18 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
 
     private ArrayList<ReceiptBarModel> receiptList;
+//    private ArrayList<ReceiptBarModel> receiptListFull;
     private Context context;
+//    private Database db;
 
     public ReceiptBarAdapter(Context context) {
         receiptList = new ArrayList<ReceiptBarModel>();
+//        receiptListFull = new ArrayList<>(receiptList);
+//        db = new Database(context);
         this.context = context;
 
     }
@@ -57,6 +64,40 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         receiptList.get(position).setReceiptBarTag(tag);
         notifyItemChanged(position);
     }
+
+    public void clearList() {
+        receiptList.clear();
+        notifyDataSetChanged();
+    }
+
+
+//    @Override
+//    public Filter getFilter() {
+//        return receiptFilter;
+//    }
+//
+//    private Filter receiptFilter = new Filter() {
+//        @Override
+//        protected FilterResults performFiltering(CharSequence constraint) {
+//            List<ReceiptBarModel> filteredList = new ArrayList<>();
+//
+//            String searchInput = constraint.toString().toLowerCase().trim();
+//
+//            filteredList = db.searchFilteredReceipts(searchInput, isMerchant, date, year, isAscending);
+//
+//            FilterResults results = new FilterResults();
+//            results.values = filteredList;
+//
+//            return results;
+//        }
+//
+//        @Override
+//        protected void publishResults(CharSequence constraint, FilterResults results) {
+//            receiptList.clear();
+//            receiptList.addAll((List)results.values);
+//            notifyDataSetChanged();
+//        }
+//    };
 
 
 }

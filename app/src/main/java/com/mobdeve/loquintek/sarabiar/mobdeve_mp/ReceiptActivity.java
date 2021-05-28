@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -45,7 +46,7 @@ public class ReceiptActivity extends AppCompatActivity {
     private TextView miniTotalTv;
 
     private Chip receiptTagChp;
-    private Button receiptTagBtn;
+    private ImageButton receiptTagBtn;
     private Spinner popupTagSp;
     private Button popupSaveBtn;
     private Button popupTagCancelBtn;
@@ -53,7 +54,7 @@ public class ReceiptActivity extends AppCompatActivity {
     private List<String> tagNames;
     private ArrayAdapter<String> dataAdapter;
 
-    private Button deleteBtn;
+    private ImageButton deleteBtn;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Button popupConfirmBtn;
@@ -64,6 +65,7 @@ public class ReceiptActivity extends AppCompatActivity {
     private ReceiptModel receipt;
     private String serialNo;
     private int receipt_position;
+    private String totalPrice;
 
     private NumberFormat numFormatter;
 
@@ -95,6 +97,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         serialNo = intent.getStringExtra("SERIAL_NO");
+        totalPrice = intent.getStringExtra("TOTAL");
         receipt_position = intent.getIntExtra("POSITION", 0);
 
         db = new Database(this);
@@ -108,13 +111,22 @@ public class ReceiptActivity extends AppCompatActivity {
         String tag = receipt.getTagAsString();
 
 
-        serialTv.setText(serialNo);
+        totalTv.setText("TOTAL: " + totalPrice);
+        serialTv.setText("Serial No. : " + serialNo);
         storeTv.setText(merchant);
         addressTv.setText(address);
         dateTv.setText(date);
-        vatableTv.setText(vatable);
-        vatTv.setText(vat);
-        receiptTagChp.setText(tag);
+        vatableTv.setText("Vatable: Php " + vatable);
+        vatTv.setText("VAT: Php " + vat);
+        miniTotalTv.setText("Total: " + totalPrice);
+
+        if (tag != null && tag.length() > 0) {
+            receiptTagChp.setText(tag);
+        }
+
+        else {
+            receiptTagChp.setText("N/A");
+        }
 
 
         populateTable();
@@ -163,6 +175,10 @@ public class ReceiptActivity extends AppCompatActivity {
                 1.5f
         );
 
+        itemParam.setMargins(0, 20, 0, 0);
+        qtyParam.setMargins(0, 20, 0, 0);
+        priceParam.setMargins(0, 20, 0, 0);
+
 
 
         for (int i = 0; i < num_items; i++) {
@@ -170,21 +186,25 @@ public class ReceiptActivity extends AppCompatActivity {
             TableRow row= new TableRow(this);
             row.setLayoutParams(lp);
 
-
             TextView item = new TextView(this);
             item.setLayoutParams(itemParam);
             item.setGravity(Gravity.CENTER);
             item.setText(stItems.nextToken());
+            item.setTextSize(16);
 
             TextView qty = new TextView(this);
             qty.setLayoutParams(qtyParam);
             qty.setGravity(Gravity.CENTER);
             qty.setText(stQty.nextToken());
+            qty.setTextSize(16);
+
 
             TextView price = new TextView(this);
             price.setLayoutParams(priceParam);
             price.setGravity(Gravity.CENTER);
-            price.setText(numFormatter.format(Double.parseDouble(stPrices.nextToken())));
+            price.setText("Php " + numFormatter.format(Double.parseDouble(stPrices.nextToken())));
+            price.setTextSize(16);
+
 
             row.addView(item);
             row.addView(qty);
@@ -240,7 +260,7 @@ public class ReceiptActivity extends AppCompatActivity {
         popupTagSp.setAdapter(dataAdapter);
 
         String tagName = receiptTagChp.getText().toString();
-        if (tagName != null && tagName != "") {
+        if (tagName.compareTo("N/A") != 0) {
             Log.d("receipt holder", "tag name:" + tagName);
             setTagMenuDefault(tagName);
         }

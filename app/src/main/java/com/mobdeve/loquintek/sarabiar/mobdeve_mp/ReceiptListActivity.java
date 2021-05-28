@@ -1,5 +1,6 @@
 package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,9 +11,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SearchView;
+import android.widget.Spinner;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -26,6 +33,12 @@ public class ReceiptListActivity extends AppCompatActivity {
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
+
+    private SearchView receiptListSv;
+    private RadioGroup filterRg;
+    private RadioGroup sortRg;
+    private boolean isMerchant;
+    private boolean isAscending;
 
     private EditText popupTagEt;
     private Button popupDoneBtn;
@@ -54,12 +67,91 @@ public class ReceiptListActivity extends AppCompatActivity {
         adapter = new ReceiptBarAdapter(this);
         receiptListItemsRv.setAdapter(adapter);
 
-//        addItem("Hello", "June 12, 2020", "Pagkain", 10.00, "A123985123");
-
+        receiptListSv = findViewById(R.id.receiptListSv);
+        filterRg = findViewById(R.id.filterRg);
+        sortRg = findViewById(R.id.sortRg);
+        isMerchant = true;
+        isAscending = false;
         Database db = new Database(this);
-        receipts = db.getAll();
 
+//        if(savedInstanceState != null) {
+//
+//            isMerchant = savedInstanceState.getBoolean("SEARCH_MERCHANT", false);
+//            isAscending = savedInstanceState.getBoolean("IS_ASCENDING", false);
+//            receiptListSv.setQuery(savedInstanceState.getString("SEARCH_KEY", ""), false);
+//
+//            if (isMerchant) {
+//                ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
+//            }
+//
+//            else {
+//                ((RadioButton) filterRg.getChildAt(1)).setChecked(true);
+//            }
+//
+//            if (isAscending) {
+//                ((RadioButton) filterRg.getChildAt(1)).setChecked(true);
+//            }
+//
+//            else {
+//                ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
+//            }
+//
+//            receipts = db.getAll();
+//            // will change later
+//        }
+
+        receipts = db.getAllByDateDescending();
+        populateAdapter(receipts);
+
+        ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
+        filterRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = findViewById(checkedId);
+                if (radioButton.getText().toString().compareTo("Merchant") == 0) {
+                    isMerchant = true;
+                }
+
+                else
+                    isMerchant = false;
+            }
+        });
+
+        ((RadioButton) sortRg.getChildAt(0)).setChecked(true);
+        sortRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = findViewById(checkedId);
+                if(radioButton.getText().toString().compareTo("Oldest") == 0) {
+                    isAscending = true;
+                }
+
+                else
+                    isAscending = false;
+            }
+        });
+
+        receiptListSv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                receipts.clear();
+                receipts = db.searchFilteredReceipts(query, isMerchant, -1, -1, isAscending);
+
+                populateAdapter(receipts);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+    }
+
+    private void populateAdapter(List<ReceiptModel> receipts) {
         @SuppressLint("SimpleDateFormat") Format formatter = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+        adapter.clearList();
 
         for (int i=0; i < receipts.size(); i++ ) {
             ReceiptModel curReceipt = receipts.get(i);
@@ -78,7 +170,6 @@ public class ReceiptListActivity extends AppCompatActivity {
 
             addItem(merchant, date, items, total, serial, tag);
         }
-
     }
 
     public void addItem(String storeName, String date, String items, double total, String serial, String tag){
@@ -110,5 +201,13 @@ public class ReceiptListActivity extends AppCompatActivity {
         }
     }
 
-
+//    @Override
+//    protected void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        Log.d("RECEIPT LIST", "onSaveInstanceState executed.");
+//        outState.putString("SEARCH_KEY", receiptListSv.getQuery().toString());
+//        outState.putBoolean("SEARCH_MERCHANT", isMerchant);
+//        outState.putBoolean("IS_ASCENDING", isAscending);
+////        outState.putInt(INT_STATE_KEY, this.some_int);
+//    }
 }
