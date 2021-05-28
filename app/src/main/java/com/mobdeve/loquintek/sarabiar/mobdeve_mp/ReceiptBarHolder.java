@@ -3,18 +3,23 @@ package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TableLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReceiptBarHolder extends RecyclerView.ViewHolder{
 
@@ -22,6 +27,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private TextView receiptBarDateTv;
     private TextView receiptBarItemsTv;
     private TextView receiptBarTotalTv;
+    private Chip receiptBarTagChp;
     private Button receiptBarSettingsBtn;
     private Button receiptBarTagBtn;
     private String receiptBarSerialNo;
@@ -29,11 +35,15 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Context context;
+    private List<Tag> tags;
+    private List<String> tagNames;
+    private ArrayAdapter<String> dataAdapter;
 
-    private EditText popupTagEt;
-    private Button popupAddBtn;
-    private Button popupDoneBtn;
-    private TableLayout popupTagTl;
+    private Database db;
+
+    private Spinner popupTagSp;
+    private Button popupSaveBtn;
+    private Button popupTagCancelBtn;
 
     private NumberFormat numFormatter;
 
@@ -46,6 +56,12 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         receiptBarTotalTv = view.findViewById(R.id.receiptBarTotalTv);
         receiptBarSettingsBtn = view.findViewById(R.id.receiptBarSettingsBtn);
         receiptBarTagBtn = view.findViewById(R.id.receiptBarTagBtn);
+        receiptBarTagChp = view.findViewById(R.id.receiptTagChp);
+
+        db = new Database(context);
+        tags = db.getAllTags();
+        populateTagMenu();
+        dataAdapter =  new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tagNames);
 
         numFormatter = new DecimalFormat("#0.00");
         this.context = context;
@@ -94,30 +110,65 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
         this.receiptBarSerialNo = serialNo;
     }
 
-
+    public void setReceiptBarTagChp(String tagName) {
+        this.receiptBarTagChp.setText(tagName);
+    }
 
     private void createTagDialog() {
         dialogBuilder = new AlertDialog.Builder(context);
         final View tagPopupView = LayoutInflater.from(context).inflate(R.layout.tag_popup_layout, null);
 
-        popupTagEt = tagPopupView.findViewById(R.id.popupTagEt);
-        popupDoneBtn = tagPopupView.findViewById(R.id.popupDoneBtn);
-        popupAddBtn = tagPopupView.findViewById(R.id.popupAddBtn);
-        popupTagTl = tagPopupView.findViewById(R.id.popupTagTl);
+        popupTagSp = tagPopupView.findViewById(R.id.popupTagSp);
+        popupTagCancelBtn = tagPopupView.findViewById(R.id.popupTagCancelBtn);
+        popupSaveBtn = tagPopupView.findViewById(R.id.popupSaveBtn);
 
+        popupTagSp.setAdapter(dataAdapter);
 
-//        fill tablelayout with chips
+        String tagName = receiptBarTagChp.getText().toString();
+        if (tagName != null && tagName != "") {
+            Log.d("receipt holder", "tag name:" + tagName);
+            setTagMenuDefault(tagName);
+        }
 
         dialogBuilder.setView(tagPopupView);
         dialog = dialogBuilder.create();
         dialog.show();
 
-        popupDoneBtn.setOnClickListener(new View.OnClickListener() {
+        popupTagCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
+        popupSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagName = popupTagSp.getSelectedItem().toString();
+                db.addReceiptTag(receiptBarSerialNo, tagName);
+                receiptBarTagChp.setText(tagName);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    private void populateTagMenu() {
+
+        tagNames = new ArrayList<String>();
+
+        for (int i = 0; i < tags.size(); i++) {
+            tagNames.add(tags.get(i).getTagName());
+        }
+    }
+
+    private void setTagMenuDefault(String tagName) {
+        int i;
+        for (i = 0; i < tagNames.size(); i++) {
+            if (tagNames.get(i).compareTo(tagName) == 0)
+                break;
+        }
+
+        popupTagSp.setSelection(i);
     }
 }

@@ -10,16 +10,22 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.google.android.material.chip.Chip;
 
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -37,6 +43,15 @@ public class ReceiptActivity extends AppCompatActivity {
     private TextView vatableTv;
     private TextView vatTv;
     private TextView miniTotalTv;
+
+    private Chip receiptTagChp;
+    private Button receiptTagBtn;
+    private Spinner popupTagSp;
+    private Button popupSaveBtn;
+    private Button popupTagCancelBtn;
+    private List<Tag> tags;
+    private List<String> tagNames;
+    private ArrayAdapter<String> dataAdapter;
 
     private Button deleteBtn;
     private AlertDialog.Builder dialogBuilder;
@@ -63,6 +78,9 @@ public class ReceiptActivity extends AppCompatActivity {
         dateTv = findViewById(R.id.dateTv);
         serialTv = findViewById(R.id.serialTv);
 
+        receiptTagChp = findViewById(R.id.receiptTagChp);
+        receiptTagBtn = findViewById(R.id.receiptTagBtn);
+
         totalTv = findViewById(R.id.totalTv);
         cashTv = findViewById(R.id.cashTv);
         changeTv = findViewById(R.id.changeTv);
@@ -87,6 +105,7 @@ public class ReceiptActivity extends AppCompatActivity {
         String date = dateFormatter.format(receipt.getDate());
         String vatable = numFormatter.format(receipt.getVatablePrice());
         String vat = numFormatter.format(receipt.getVatPrice());
+        String tag = receipt.getTagAsString();
 
 
         serialTv.setText(serialNo);
@@ -95,15 +114,23 @@ public class ReceiptActivity extends AppCompatActivity {
         dateTv.setText(date);
         vatableTv.setText(vatable);
         vatTv.setText(vat);
+        receiptTagChp.setText(tag);
+
 
         populateTable();
-        Log.d("RECEIPT", "position " + receipt_position);
-
+        populateTagMenu();
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createConfirmDialog();
+            }
+        });
+
+        receiptTagBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createTagDialog();
             }
         });
     }
@@ -200,5 +227,70 @@ public class ReceiptActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void createTagDialog() {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View tagPopupView = getLayoutInflater().inflate(R.layout.tag_popup_layout, null);
+
+        popupTagSp = tagPopupView.findViewById(R.id.popupTagSp);
+        popupTagCancelBtn = tagPopupView.findViewById(R.id.popupTagCancelBtn);
+        popupSaveBtn = tagPopupView.findViewById(R.id.popupSaveBtn);
+
+        popupTagSp.setAdapter(dataAdapter);
+
+        String tagName = receiptTagChp.getText().toString();
+        if (tagName != null && tagName != "") {
+            Log.d("receipt holder", "tag name:" + tagName);
+            setTagMenuDefault(tagName);
+        }
+
+        dialogBuilder.setView(tagPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        popupTagCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        popupSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagName = popupTagSp.getSelectedItem().toString();
+                db.addReceiptTag(serialNo, tagName);
+                receiptTagChp.setText(tagName);
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.putExtra("IS_UPDATE", true);
+                intent.putExtra("NEW_TAG", tagName);
+                intent.putExtra("POSITION", receipt_position);
+                setResult(Activity.RESULT_OK, intent);
+            }
+        });
+
+    }
+
+    private void populateTagMenu() {
+        tags = db.getAllTags();
+        tagNames = new ArrayList<String>();
+
+        for (int i = 0; i < tags.size(); i++) {
+            tagNames.add(tags.get(i).getTagName());
+        }
+
+        dataAdapter =  new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tagNames);
+    }
+
+    private void setTagMenuDefault(String tagName) {
+        int i;
+        for (i = 0; i < tagNames.size(); i++) {
+            if (tagNames.get(i).compareTo(tagName) == 0)
+                break;
+        }
+
+        popupTagSp.setSelection(i);
     }
 }

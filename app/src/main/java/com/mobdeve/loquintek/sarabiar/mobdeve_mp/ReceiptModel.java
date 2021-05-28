@@ -148,7 +148,9 @@ public class ReceiptModel {
         this.serialNumber = serialNumber;
     }
     public String getTagAsString(){
-
+        if (receiptTag == null) {
+            return null;
+        }
         return receiptTag.getTagName();
     }
 
