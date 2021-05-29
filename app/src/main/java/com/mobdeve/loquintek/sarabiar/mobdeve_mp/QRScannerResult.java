@@ -69,7 +69,8 @@ public class QRScannerResult extends AppCompatActivity {
                 Database database = new Database(QRScannerResult.this);
 
                 boolean success = database.addReceipt(newReceipt);
-                Toast.makeText(QRScannerResult.this, "Success = " + success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(QRScannerResult.this, "Receipt has been saved successfully!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
