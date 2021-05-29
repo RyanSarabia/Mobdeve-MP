@@ -141,7 +141,7 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + tagName+ "'" +  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + tagName+ "'" +  " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + updateSerialNumber +"'";
 
         db.execSQL(updateString);
         db.close();
@@ -220,10 +220,12 @@ public class Database extends SQLiteOpenHelper{
     public List<ReceiptModel> getAll(){
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
 
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE;
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -295,9 +297,11 @@ public class Database extends SQLiteOpenHelper{
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY COLUMN_DATE DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -342,9 +346,11 @@ public class Database extends SQLiteOpenHelper{
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY COLUMN_DATE ASC";
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(queryString);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -388,9 +394,11 @@ public class Database extends SQLiteOpenHelper{
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY COLUMN_MERCHANT_NAME ASC";
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -434,9 +442,11 @@ public class Database extends SQLiteOpenHelper{
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY COLUMN_MERCHANT_NAME DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -480,9 +490,11 @@ public class Database extends SQLiteOpenHelper{
         //Gets all receipts based on when it was added
         List<ReceiptModel> returnList = new ArrayList<>();
 
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" = " + tagName;
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         if (cursor.moveToFirst()){
@@ -525,8 +537,11 @@ public class Database extends SQLiteOpenHelper{
     public List<ReceiptModel> searchFilteredReceipts(String input, boolean isMerchant, int day, int year, boolean isAscending){
 
         List<ReceiptModel> returnList = new ArrayList<>();
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         String queryString = "";
+        Log.d("THE INPUT: ", input);
 
         if (isMerchant && isAscending && !input.equals("")){
             queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
@@ -541,10 +556,10 @@ public class Database extends SQLiteOpenHelper{
             queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
         }
         else if (input.equals("") && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY "+ COLUMN_DATE;
         }
         else{
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY "+ COLUMN_DATE + " DESC";
         }
 
         Cursor cursor = db.rawQuery(queryString, null);
@@ -594,9 +609,11 @@ public class Database extends SQLiteOpenHelper{
 
         ReceiptModel returnReceipt;
 
-        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
+        String createTableStatement = "CREATE TABLE IF NOT EXISTS " + RECEIPTS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_MERCHANT_NAME + " TEXT, " + COLUMN_MERCHANT_ADDRESS + " TEXT, " + COLUMN_ITEMS + " TEXT, " + COLUMN_UNIT_PRICES + " TEXT, " + COLUMN_ITEM_QUANTITIES + " TEXT, " + COLUMN_VAT + " REAL, " + COLUMN_VATABLE + " REAL, " + COLUMN_DATE + " TEXT, " + COLUMN_SERIAL_NUMBER + " TEXT, " + COLUMN_TAGS +" TEXT, " + COLUMN_AMOUNT_PAID + " REAL)";
+        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + getSerialNumber + "'";
 
         SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL(createTableStatement);
         Cursor cursor = db.rawQuery(queryString, null);
 
         cursor.moveToFirst();
@@ -637,7 +654,7 @@ public class Database extends SQLiteOpenHelper{
     public boolean deleteOne (String deleteSerialNumber){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + deleteSerialNumber;
+        String queryString = "DELETE FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + deleteSerialNumber + "'";
 
         Cursor cursor = db.rawQuery(queryString, null);
 

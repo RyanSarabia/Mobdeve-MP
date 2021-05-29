@@ -132,6 +132,11 @@ public class ReceiptListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (receiptListSv.getQuery().length() == 0) {
+                    receipts.clear();
+                    receipts = db.searchFilteredReceipts("", isMerchant, -1, -1, isAscending);
+                    populateAdapter(receipts);
+                }
                 return false;
             }
         });

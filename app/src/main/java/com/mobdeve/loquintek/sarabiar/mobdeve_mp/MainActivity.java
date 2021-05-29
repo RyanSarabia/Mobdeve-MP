@@ -26,11 +26,6 @@ public class MainActivity extends AppCompatActivity {
         scanMv = findViewById(R.id.scanMv);
         tagMv = findViewById(R.id.tagMv);
 
-
-        Database db = new Database(this);
-//        db.deleteAll();
-        db.addDummyReceipt();
-
         receiptsMv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
