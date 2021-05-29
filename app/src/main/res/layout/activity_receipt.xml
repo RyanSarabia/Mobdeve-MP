@@ -87,21 +87,24 @@
                     android:background="#C8C8C8">
 
                     <TextView
-                        android:layout_weight="3"
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.7"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="Item"
                         android:textSize="18sp" />
 
                     <TextView
-                        android:layout_weight="0.5"
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.1"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
-                        android:text="Quantity"
+                        android:text="Qty"
                         android:textSize="18sp" />
 
                     <TextView
-                        android:layout_weight="1.5"
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.2"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center"
                         android:text="Price"

@@ -69,35 +69,4 @@ public class ReceiptBarAdapter extends RecyclerView.Adapter<ReceiptBarHolder>{
         receiptList.clear();
         notifyDataSetChanged();
     }
-
-
-//    @Override
-//    public Filter getFilter() {
-//        return receiptFilter;
-//    }
-//
-//    private Filter receiptFilter = new Filter() {
-//        @Override
-//        protected FilterResults performFiltering(CharSequence constraint) {
-//            List<ReceiptBarModel> filteredList = new ArrayList<>();
-//
-//            String searchInput = constraint.toString().toLowerCase().trim();
-//
-//            filteredList = db.searchFilteredReceipts(searchInput, isMerchant, date, year, isAscending);
-//
-//            FilterResults results = new FilterResults();
-//            results.values = filteredList;
-//
-//            return results;
-//        }
-//
-//        @Override
-//        protected void publishResults(CharSequence constraint, FilterResults results) {
-//            receiptList.clear();
-//            receiptList.addAll((List)results.values);
-//            notifyDataSetChanged();
-//        }
-//    };
-
-
 }

@@ -11,11 +11,12 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:fontFamily="sans-serif-black"
         android:text="Welcome!"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <com.mobdeve.loquintek.sarabiar.mobdeve_mp.MenuItemView
         android:id="@+id/receiptsMv"
@@ -48,5 +49,16 @@
         app:menuItemDescTv="Add, edit, and delete tags."
         app:menuItemImg="@drawable/tag_icon"
         app:menuItemNameTv="Customize Tags" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="ReSeebo"
+        android:textColor="#0253D8"
+        android:textSize="50sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

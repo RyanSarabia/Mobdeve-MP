@@ -74,31 +74,6 @@ public class ReceiptListActivity extends AppCompatActivity {
         isAscending = false;
         Database db = new Database(this);
 
-//        if(savedInstanceState != null) {
-//
-//            isMerchant = savedInstanceState.getBoolean("SEARCH_MERCHANT", false);
-//            isAscending = savedInstanceState.getBoolean("IS_ASCENDING", false);
-//            receiptListSv.setQuery(savedInstanceState.getString("SEARCH_KEY", ""), false);
-//
-//            if (isMerchant) {
-//                ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
-//            }
-//
-//            else {
-//                ((RadioButton) filterRg.getChildAt(1)).setChecked(true);
-//            }
-//
-//            if (isAscending) {
-//                ((RadioButton) filterRg.getChildAt(1)).setChecked(true);
-//            }
-//
-//            else {
-//                ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
-//            }
-//
-//            receipts = db.getAll();
-//            // will change later
-//        }
 
         receipts = db.getAllByDateDescending();
         populateAdapter(receipts);
@@ -205,14 +180,4 @@ public class ReceiptListActivity extends AppCompatActivity {
             }
         }
     }
-
-//    @Override
-//    protected void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Log.d("RECEIPT LIST", "onSaveInstanceState executed.");
-//        outState.putString("SEARCH_KEY", receiptListSv.getQuery().toString());
-//        outState.putBoolean("SEARCH_MERCHANT", isMerchant);
-//        outState.putBoolean("IS_ASCENDING", isAscending);
-////        outState.putInt(INT_STATE_KEY, this.some_int);
-//    }
 }
