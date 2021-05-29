@@ -36,7 +36,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receiptsMv"
-        app:menuItemDescTv="Export and import data"
+        app:menuItemDescTv="Scan QR code from merchant to get your digital receipt."
         app:menuItemImg="@drawable/qr_icon"
         app:menuItemNameTv="Scan QR Code" />
 

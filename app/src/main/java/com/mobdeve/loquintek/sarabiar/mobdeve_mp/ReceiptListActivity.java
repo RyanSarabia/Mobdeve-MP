@@ -137,6 +137,13 @@ public class ReceiptListActivity extends AppCompatActivity {
                     receipts = db.searchFilteredReceipts("", isMerchant, -1, -1, isAscending);
                     populateAdapter(receipts);
                 }
+                if (receipts.size() == 0) {
+                    receiptWarningTv.setVisibility(View.VISIBLE);
+                }
+
+                else {
+                    receiptWarningTv.setVisibility(View.GONE);
+                }
                 return false;
             }
         });
