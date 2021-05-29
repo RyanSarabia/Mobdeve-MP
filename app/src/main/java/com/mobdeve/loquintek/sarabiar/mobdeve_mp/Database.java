@@ -527,6 +527,7 @@ public class Database extends SQLiteOpenHelper{
         List<ReceiptModel> returnList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "";
+        Log.d("THE INPUT: ", input);
 
         if (isMerchant && isAscending && !input.equals("")){
             queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_MERCHANT_NAME +" LIKE '%" + input + "%' ORDER BY " + COLUMN_DATE;
@@ -541,10 +542,10 @@ public class Database extends SQLiteOpenHelper{
             queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
         }
         else if (input.equals("") && isAscending){
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE;
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY "+ COLUMN_DATE;
         }
         else{
-            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_TAGS +" LIKE '%" + input + "%' ORDER BY "+ COLUMN_DATE + " DESC";
+            queryString = "SELECT * FROM " + RECEIPTS_TABLE + " ORDER BY "+ COLUMN_DATE + " DESC";
         }
 
         Cursor cursor = db.rawQuery(queryString, null);
