@@ -12,4 +12,23 @@ receipts can also be deleted. Furthermore, receipts can be given tags in order t
 
 We have provided QR codes to test the app. These QR codes are assumed to be from merchants that the user made a transaction with.
 
+#### Merchant Sample
 ![QR Code 1](./qr/qr1.png)
+
+#### Toys R Us
+![QR Code 2](./qr/qr2.png)
+
+#### Buffalo Wings and Rings and Swings and Things
+![QR Code 3](./qr/qr3.png)
+
+#### Apple
+![QR Code 4](./qr/qr4.png)
+
+#### Samsung
+![QR Code 5](./qr/qr5.png)
+
+#### Logitech
+![QR Code 6](./qr/qr6.png)
+
+#### Tara by Kyra
+![QR Code 7](./qr/qr7.png)
