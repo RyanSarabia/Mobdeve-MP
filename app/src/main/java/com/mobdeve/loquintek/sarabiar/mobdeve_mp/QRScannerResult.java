@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class QRScannerResult extends AppCompatActivity {
 
@@ -28,6 +31,8 @@ public class QRScannerResult extends AppCompatActivity {
     private Button saveReceipt;
 
     private Date receiptDate;
+
+    private String rawItems, rawUnitPrices, rawQuantities, rawVat, rawVatable, rawAmountPaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +52,19 @@ public class QRScannerResult extends AppCompatActivity {
         this.amountPaid = findViewById(R.id.amountPaid);
 
 
-
         saveReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ReceiptModel newReceipt = new ReceiptModel(-1, merchantName.getText().toString(),
                                                                 merchantAddress.getText().toString(),
-                                                                items.getText().toString(),
-                                                                unitPrices.getText().toString(),
-                                                                itemQuantities.getText().toString(),
-                                                                Float.parseFloat(vatPrice.getText().toString()),
-                                                                Float.parseFloat(vatablePrice.getText().toString()),
+                                                                rawItems,
+                                                                rawUnitPrices,
+                                                                rawQuantities,
+                                                                Float.parseFloat(rawVat),
+                                                                Float.parseFloat(rawVatable),
                                                                 receiptDate,
                                                                 serialNumber.getText().toString(),
-                                                                Float.parseFloat(amountPaid.getText().toString()));
+                                                                Float.parseFloat(rawAmountPaid));
 
                 Database database = new Database(QRScannerResult.this);
 
@@ -72,19 +76,54 @@ public class QRScannerResult extends AppCompatActivity {
         Intent fromScanner = getIntent();
         this.jsonString = fromScanner.getStringExtra("JSONString");
         try{
+
             jsonObject = new JSONObject(jsonString);
             Log.d("My App", jsonObject.toString());
 
             merchantName.setText(jsonObject.getString("merchantName"));
             merchantAddress.setText(jsonObject.getString("merchantAddress"));
-            items.setText(jsonObject.getString("items"));
-            unitPrices.setText(jsonObject.getString("unitPrices"));
-            itemQuantities.setText(jsonObject.getString("itemQuantities"));
-            vatPrice.setText(jsonObject.getString("vatPrice"));
-            vatablePrice.setText(jsonObject.getString("vatablePrice"));
+            StringTokenizer stItem = new StringTokenizer(jsonObject.getString("items"), ",");
+            rawItems = jsonObject.getString("items");
+            ArrayList<String> itemList = new ArrayList<>();
+            String itemText = "";
+            String currToken;
+            while (stItem.countTokens() > 0){
+                currToken = stItem.nextToken();
+                if (stItem.countTokens() == 0)
+                    itemText =  itemText.concat(currToken);
+                else
+                    itemText =  itemText.concat(currToken+", ");
+                itemList.add(currToken);
+            }
+            items.setText(itemText);
+
+            StringTokenizer stUnitPrices = new StringTokenizer(jsonObject.getString("unitPrices"), ",");
+            rawUnitPrices = jsonObject.getString("unitPrices");
+            int i =0;
+            String unitPricesText = "";
+            while (stUnitPrices.countTokens() > 0){
+                unitPricesText = unitPricesText.concat(itemList.get(i) +":  " + stUnitPrices.nextToken() + "\n");
+                i++;
+            }
+            unitPrices.setText(unitPricesText);
+
+            StringTokenizer stQuantities = new StringTokenizer(jsonObject.getString("itemQuantities"), ",");
+            rawQuantities = jsonObject.getString("itemQuantities");
+            i =0;
+            String quantitiesText = "";
+            while (stQuantities.countTokens() > 0){
+                quantitiesText = quantitiesText.concat(itemList.get(i) +":  " + stQuantities.nextToken() + "\n");
+                i++;
+            }
+            itemQuantities.setText(quantitiesText);
+            vatPrice.setText("PHP: " + jsonObject.getString("vatPrice"));
+            rawVat = jsonObject.getString("vatPrice");
+            vatablePrice.setText("PHP: " + jsonObject.getString("vatablePrice"));
+            rawVatable = jsonObject.getString("vatablePrice");
             date.setText(jsonObject.getString("date"));
             serialNumber.setText(jsonObject.getString("serialNumber"));
-            amountPaid.setText(jsonObject.getString("amountPaid"));
+            amountPaid.setText("PHP: " + jsonObject.getString("amountPaid"));
+            rawAmountPaid = jsonObject.getString("amountPaid");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             try{
                 this.receiptDate = dateFormat.parse(date.getText().toString());

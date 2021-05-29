@@ -11,7 +11,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     private MenuItemView receiptsMv;
-    private MenuItemView portMv;
+    private MenuItemView scanMv;
     private MenuItemView tagMv;
 
     private Button QRButton;
@@ -23,11 +23,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         receiptsMv = findViewById(R.id.receiptsMv);
-        portMv = findViewById(R.id.portMv);
+        scanMv = findViewById(R.id.scanMv);
         tagMv = findViewById(R.id.tagMv);
 
-        QRButton = findViewById(R.id.QRButton);
-        exportButtton = findViewById(R.id.exportButton);
 
         Database db = new Database(this);
         db.deleteAll();
@@ -41,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        portMv.setOnClickListener(new View.OnClickListener() {
+        scanMv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PortActivity.class);
-                MainActivity.this.startActivity(intent);
+                Intent goToScanner = new Intent(getApplicationContext(), QRScanner.class);
+                MainActivity.this.startActivity(goToScanner);
             }
         });
 
@@ -57,13 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        QRButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToScanner = new Intent(getApplicationContext(), QRScanner.class);
-                MainActivity.this.startActivity(goToScanner);
-            }
-        });
 
 //        exportButtton.setOnClickListener(new View.OnClickListener() {
 //            @Override

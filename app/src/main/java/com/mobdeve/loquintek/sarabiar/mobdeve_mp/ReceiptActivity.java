@@ -65,7 +65,8 @@ public class ReceiptActivity extends AppCompatActivity {
     private ReceiptModel receipt;
     private String serialNo;
     private int receipt_position;
-    private String totalPrice;
+    private Float totalPrice;
+
 
     private NumberFormat numFormatter;
 
@@ -97,7 +98,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         serialNo = intent.getStringExtra("SERIAL_NO");
-        totalPrice = intent.getStringExtra("TOTAL");
+        totalPrice = intent.getFloatExtra("TOTAL", 0);
         receipt_position = intent.getIntExtra("POSITION", 0);
 
         db = new Database(this);
@@ -110,7 +111,7 @@ public class ReceiptActivity extends AppCompatActivity {
         String vat = numFormatter.format(receipt.getVatPrice());
         String tag = receipt.getTagAsString();
         String cash = numFormatter.format(receipt.getAmountPaid());
-        String change = numFormatter.format(Double.parseDouble(totalPrice) - receipt.getAmountPaid());
+        String change = numFormatter.format(totalPrice - receipt.getAmountPaid());
 
         totalTv.setText("TOTAL: " + totalPrice);
         serialTv.setText("Serial No. : " + serialNo);
