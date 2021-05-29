@@ -3,8 +3,11 @@ package com.mobdeve.loquintek.sarabiar.mobdeve_mp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,7 +49,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private Button popupTagCancelBtn;
 
     private NumberFormat numFormatter;
-    private Double total;
+    private double total;
 
     public ReceiptBarHolder (View view, Context context) {
         super(view);
@@ -85,6 +88,25 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
                 ((Activity)v.getContext()).startActivityForResult(intent, 1);
             }
         });
+
+//        view.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Log.d("RECEIPT HOLDEr", event.toString());
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    Log.d("RECEIPT HOLDEr", "ACTION DOWN");
+//                    v.getBackground().setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.DARKEN);
+//                    return false;
+//                }
+//
+//                if(event.getAction() == MotionEvent.ACTION_CANCEL){
+//                    v.getBackground().clearColorFilter();
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
 
     }
 

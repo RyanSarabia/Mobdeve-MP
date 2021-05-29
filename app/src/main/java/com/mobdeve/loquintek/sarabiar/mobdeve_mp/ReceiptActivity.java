@@ -65,7 +65,7 @@ public class ReceiptActivity extends AppCompatActivity {
     private ReceiptModel receipt;
     private String serialNo;
     private int receipt_position;
-    private Float totalPrice;
+    private double totalPrice;
 
 
     private NumberFormat numFormatter;
@@ -98,7 +98,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         serialNo = intent.getStringExtra("SERIAL_NO");
-        totalPrice = intent.getFloatExtra("TOTAL", 0);
+        totalPrice = intent.getDoubleExtra("TOTAL", 0);
         receipt_position = intent.getIntExtra("POSITION", 0);
 
         db = new Database(this);
@@ -113,16 +113,16 @@ public class ReceiptActivity extends AppCompatActivity {
         String cash = numFormatter.format(receipt.getAmountPaid());
         String change = numFormatter.format(totalPrice - receipt.getAmountPaid());
 
-        totalTv.setText("TOTAL: " + totalPrice);
+        totalTv.setText("TOTAL: " + numFormatter.format(totalPrice));
         serialTv.setText("Serial No. : " + serialNo);
         storeTv.setText(merchant);
         addressTv.setText(address);
         dateTv.setText(date);
         vatableTv.setText("Vatable: Php " + vatable);
         vatTv.setText("VAT: Php " + vat);
-        miniTotalTv.setText("Total: " + totalPrice);
-        cashTv.setText("Amount paid: Php" + cash);
-        changeTv.setText("Change: Php" + change);
+        miniTotalTv.setText("Total: " + numFormatter.format(totalPrice));
+        cashTv.setText("Amount paid: Php " + cash);
+        changeTv.setText("Change: Php " + change);
         if (tag != null && tag.length() > 0) {
             receiptTagChp.setText(tag);
         }
@@ -163,19 +163,19 @@ public class ReceiptActivity extends AppCompatActivity {
         TableRow.LayoutParams itemParam = new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.MATCH_PARENT,
-                3f
+                0.7f
         );
 
         TableRow.LayoutParams qtyParam = new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.MATCH_PARENT,
-                0.5f
+                0.1f
         );
 
         TableRow.LayoutParams priceParam = new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.MATCH_PARENT,
-                1.5f
+                0.2f
         );
 
         itemParam.setMargins(0, 20, 0, 0);
@@ -305,6 +305,8 @@ public class ReceiptActivity extends AppCompatActivity {
         }
 
         dataAdapter =  new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tagNames);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
     }
 
     private void setTagMenuDefault(String tagName) {
