@@ -46,6 +46,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     private Button popupTagCancelBtn;
 
     private NumberFormat numFormatter;
+    private Double total;
 
     public ReceiptBarHolder (View view, Context context) {
         super(view);
@@ -79,7 +80,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ReceiptActivity.class);
                 intent.putExtra("SERIAL_NO", receiptBarSerialNo);
-                intent.putExtra("TOTAL", receiptBarTotalTv.getText().toString());
+                intent.putExtra("TOTAL", total);
                 intent.putExtra("POSITION", ReceiptBarHolder.this.getAdapterPosition());
                 ((Activity)v.getContext()).startActivityForResult(intent, 1);
             }
@@ -100,7 +101,7 @@ public class ReceiptBarHolder extends RecyclerView.ViewHolder{
     }
 
     public void setReceiptBarTotalTv(double total) {
-
+        this.total = total;
         this.receiptBarTotalTv.setText("Php " + numFormatter.format(total));
     }
 
