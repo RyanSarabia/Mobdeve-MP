@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,7 @@ public class ReceiptListActivity extends AppCompatActivity {
     private RadioGroup sortRg;
     private boolean isMerchant;
     private boolean isAscending;
+    private TextView receiptWarningTv;
 
     private EditText popupTagEt;
     private Button popupDoneBtn;
@@ -70,6 +72,7 @@ public class ReceiptListActivity extends AppCompatActivity {
         receiptListSv = findViewById(R.id.receiptListSv);
         filterRg = findViewById(R.id.filterRg);
         sortRg = findViewById(R.id.sortRg);
+        receiptWarningTv = findViewById(R.id.receiptWarningTv);
         isMerchant = true;
         isAscending = false;
         Database db = new Database(this);
@@ -77,6 +80,10 @@ public class ReceiptListActivity extends AppCompatActivity {
 
         receipts = db.getAllByDateDescending();
         populateAdapter(receipts);
+
+        if (receipts.size() == 0) {
+            receiptWarningTv.setVisibility(View.VISIBLE);
+        }
 
         ((RadioButton) filterRg.getChildAt(0)).setChecked(true);
         filterRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -111,8 +118,15 @@ public class ReceiptListActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 receipts.clear();
                 receipts = db.searchFilteredReceipts(query, isMerchant, -1, -1, isAscending);
-
                 populateAdapter(receipts);
+
+                if (receipts.size() == 0) {
+                    receiptWarningTv.setVisibility(View.VISIBLE);
+                }
+
+                else {
+                    receiptWarningTv.setVisibility(View.GONE);
+                }
                 return false;
             }
 

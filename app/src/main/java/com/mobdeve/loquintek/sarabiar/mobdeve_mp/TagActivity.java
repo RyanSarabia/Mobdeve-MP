@@ -24,8 +24,11 @@ public class TagActivity extends AppCompatActivity {
     private Button tagAddBtn;
     private ChipGroup tagCg;
 
+    private TextView tagWarningTv;
+
     private Database db;
     private List<Tag> tagList;
+    private int tagListSize;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -48,8 +51,15 @@ public class TagActivity extends AppCompatActivity {
         tagAddBtn = findViewById(R.id.tagAddBtn);
         tagCg = findViewById(R.id.tagCg);
 
+        tagWarningTv = findViewById(R.id.tagsWarningTv);
+
         db = new Database(this);
         tagList = db.getAllTags();
+        tagListSize = tagList.size();
+
+        if (tagListSize == 0) {
+            tagWarningTv.setVisibility(View.VISIBLE);
+        }
 
         populateChipGroup();
 
@@ -70,18 +80,23 @@ public class TagActivity extends AppCompatActivity {
                 }
 
                 else {
-                    boolean truth = db.addTag(tagNameEt.getText().toString());
 
-                    if(truth) {
-                        Log.d("TAG", "has added! ");
+                    if (name.length() > 0) {
+
+                        db.addTag(tagNameEt.getText().toString());
+
+                        tagList.add(tag);
+                        addChip(name);
                     }
 
                     else {
-                        Log.d("TAG", "has not been added! ");
-                    }
+                        Toast.makeText(
+                                TagActivity.this,
+                                "Tags should be at least 1 character long.",
+                                Toast.LENGTH_LONG
+                        ).show();
 
-                    tagList.add(tag);
-                    addChip(name);
+                    }
                 }
             }
         });
@@ -92,7 +107,6 @@ public class TagActivity extends AppCompatActivity {
             String tagName = tagList.get(i).getTagName();
             addChip(tagName);
         }
-
     }
 
     private void addChip(String tagName) {
@@ -115,6 +129,8 @@ public class TagActivity extends AppCompatActivity {
         });
 
         tagCg.addView(tagChip);
+        tagListSize++;
+        tagWarningTv.setVisibility(View.GONE);
     }
 
     private void createConfirmDialog(View chipView) {
@@ -145,7 +161,10 @@ public class TagActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.dismiss();
                 db.deleteTag(name);
-//                tagList.remove(name);
+                tagListSize--;
+                if (tagListSize == 0) {
+                    tagWarningTv.setVisibility(View.VISIBLE);
+                }
                 tagCg.removeView(chipView);
             }
         });

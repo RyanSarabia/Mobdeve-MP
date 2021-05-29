@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Database db = new Database(this);
-        db.deleteAll();
+//        db.deleteAll();
         db.addDummyReceipt();
 
         receiptsMv.setOnClickListener(new View.OnClickListener() {

@@ -34,13 +34,12 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popupTagSp">
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
 
         <Button
             android:id="@+id/popupSaveBtn"
@@ -61,5 +60,19 @@
             android:text="Cancel" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Dropdown will be empty if you haven't added any Tags yet. Go to Customize Tags to make Tags"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popupTagSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
