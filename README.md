@@ -16,19 +16,19 @@ We have provided QR codes to test the app. These QR codes are assumed to be from
 ![QR Code 1](./QR/QR1.PNG)
 
 #### Toys R Us
-![QR Code 2](./QR/QR2.png)
+![QR Code 2](./QR/QR2.PNG)
 
 #### Buffalo Wings and Rings and Swings and Things
-![QR Code 3](./QR/QR3.png)
+![QR Code 3](./QR/QR3.PNG)
 
 #### Apple
-![QR Code 4](./QR/QR4.png)
+![QR Code 4](./QR/QR4.PNG)
 
 #### Samsung
-![QR Code 5](./QR/QR5.png)
+![QR Code 5](./QR/QR5.PNG)
 
 #### Logitech
-![QR Code 6](./QR/QR6.png)
+![QR Code 6](./QR/QR6.PNG)
 
 #### Tara by Kyra
-![QR Code 7](./QR/QR7.png)
+![QR Code 7](./QR/QR7.PNG)
