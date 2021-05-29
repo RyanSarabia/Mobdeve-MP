@@ -13,7 +13,7 @@ receipts can also be deleted. Furthermore, receipts can be given tags in order t
 We have provided QR codes to test the app. These QR codes are assumed to be from merchants that the user made a transaction with.
 
 #### Merchant Sample
-![QR Code 1](./QR/QR1.png)
+![QR Code 1](./QR/QR1.PNG)
 
 #### Toys R Us
 ![QR Code 2](./QR/QR2.png)
