@@ -141,7 +141,7 @@ public class Database extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + tagName+ "'" +  " WHERE " + COLUMN_SERIAL_NUMBER + " = " + updateSerialNumber;
+        String updateString = "UPDATE " + RECEIPTS_TABLE + " SET " + COLUMN_TAGS + " = '" + tagName+ "'" +  " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + updateSerialNumber +"'";
 
         db.execSQL(updateString);
         db.close();
@@ -595,7 +595,7 @@ public class Database extends SQLiteOpenHelper{
 
         ReceiptModel returnReceipt;
 
-        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + getSerialNumber;
+        String queryString = "SELECT * FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + getSerialNumber + "'";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
@@ -638,7 +638,7 @@ public class Database extends SQLiteOpenHelper{
     public boolean deleteOne (String deleteSerialNumber){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = " + deleteSerialNumber;
+        String queryString = "DELETE FROM " + RECEIPTS_TABLE + " WHERE " + COLUMN_SERIAL_NUMBER + " = '" + deleteSerialNumber + "'";
 
         Cursor cursor = db.rawQuery(queryString, null);
 

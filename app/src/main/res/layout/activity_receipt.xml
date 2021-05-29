@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
+            android:maxWidth="310dp"
             android:text="TextView"
             android:textColor="#000000"
             android:textSize="30sp" />
@@ -42,6 +43,7 @@
             android:id="@+id/dateTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxWidth="310dp"
             android:text="TextView"
             android:textSize="18sp" />
 
@@ -53,12 +55,14 @@
             android:id="@+id/addressTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxWidth="310dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/serialTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxWidth="310dp"
             android:text="TextView" />
     </LinearLayout>
 
