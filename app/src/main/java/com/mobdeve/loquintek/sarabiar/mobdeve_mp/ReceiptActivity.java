@@ -111,7 +111,14 @@ public class ReceiptActivity extends AppCompatActivity {
         String vat = numFormatter.format(receipt.getVatPrice());
         String tag = receipt.getTagAsString();
         String cash = numFormatter.format(receipt.getAmountPaid());
-        String change = numFormatter.format(totalPrice - receipt.getAmountPaid());
+
+        double change_amt = receipt.getAmountPaid() - totalPrice;
+
+        if (change_amt < 0) {
+            change_amt = 0.00;
+        }
+
+        String change = numFormatter.format(change_amt);
 
         totalTv.setText("TOTAL: " + numFormatter.format(totalPrice));
         serialTv.setText("Serial No. : " + serialNo);
